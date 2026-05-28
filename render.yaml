@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: guruji-webapp
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: AZURE_ENDPOINT
+        sync: false
+      - key: AZURE_API_KEY
+        sync: false
+      - key: AZURE_DEPLOYMENT_NAME
+        value: Kimi-K2.6
+      - key: PORT
+        value: 10000

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guruji - AI Assistant</title>
+    <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --bg-container: rgba(255, 255, 255, 0.95);
+            --bg-messages: #f0f4ff;
+            --bg-input: rgba(255, 255, 255, 0.9);
+            --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-bot: white;
+            --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-avatar-bot: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --bg-attachment: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --bg-icon-btn: white;
+            --bg-typing: #f0f4ff;
+
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-header: white;
+            --text-user: white;
+            --text-bot: #333;
+            --text-accent: #764ba2;
+
+            --border-primary: #e0e0e0;
+            --border-bot: #e0e0e0;
+            --border-input-focus: #667eea;
+            --border-icon: #764ba2;
+
+            --shadow-container: 0 20px 60px rgba(102, 126, 234, 0.3), 0 0 20px rgba(240, 147, 251, 0.2);
+            --shadow-btn: 0 5px 15px rgba(102, 126, 234, 0.5);
+
+            --scrollbar: linear-gradient(180deg, #667eea, #764ba2);
+            --scrollbar-hover: linear-gradient(180deg, #764ba2, #f093fb);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            --bg-container: rgba(30, 30, 46, 0.95);
+            --bg-messages: #181825;
+            --bg-input: rgba(30, 30, 46, 0.9);
+            --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-bot: #2d2d44;
+            --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-avatar-bot: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --bg-attachment: linear-gradient(135deg, #2d1b4e 0%, #1a1a3e 100%);
+            --bg-icon-btn: #2d2d44;
+            --bg-typing: #181825;
+
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0b0;
+            --text-header: white;
+            --text-user: white;
+            --text-bot: #e0e0e0;
+            --text-accent: #a5b4fc;
+
+            --border-primary: #3a3a55;
+            --border-bot: #3a3a55;
+            --border-input-focus: #667eea;
+            --border-icon: #a5b4fc;
+
+            --shadow-container: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(102, 126, 234, 0.15);
+            --shadow-btn: 0 5px 20px rgba(102, 126, 234, 0.6);
+
+            --scrollbar: linear-gradient(180deg, #667eea, #764ba2);
+            --scrollbar-hover: linear-gradient(180deg, #764ba2, #f093fb);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-body);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 900px;
+            height: 90vh;
+            background: var(--bg-container);
+            border-radius: 20px;
+            box-shadow: var(--shadow-container);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: var(--text-header);
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .chat-header-title {
+            flex: 1;
+            text-align: center;
+        }
+        .chat-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
+        }
+        .chat-header p { font-size: 14px; opacity: 0.9; }
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.35);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: var(--bg-messages);
+            transition: background 0.3s ease;
+        }
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.user { justify-content: flex-end; }
+        .message.bot { justify-content: flex-start; }
+        .message-content {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .message.user .message-content {
+            background: var(--bg-user);
+            color: var(--text-user);
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        .message.bot .message-content {
+            background: var(--bg-bot);
+            color: var(--text-bot);
+            border: 1px solid var(--border-bot);
+            border-bottom-left-radius: 4px;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .message.bot .message-content img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 15px;
+            margin: 0 10px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .message.user .avatar { background: var(--bg-avatar-user); color: var(--text-user); order: 1; }
+        .message.bot .avatar { background: var(--bg-avatar-bot); color: var(--text-user); }
+        .chat-input-area {
+            padding: 20px 25px;
+            background: var(--bg-input);
+            border-top: 1px solid var(--border-primary);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .attachments-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+            min-height: 0;
+        }
+        .attachment-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-attachment);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 16px;
+            font-size: 13px;
+            color: white;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .attachment-chip button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            padding: 0;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .attachment-chip button:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
+        .chat-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .chat-controls input[type="text"] {
+            flex: 1;
+            padding: 14px 22px;
+            border: 2px solid var(--border-primary);
+            border-radius: 30px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        .chat-controls input[type="text"]:focus {
+            border-color: var(--border-input-focus);
+            box-shadow: 0 0 12px rgba(102, 126, 234, 0.2);
+        }
+        .chat-controls input[type="text"]::placeholder { color: var(--text-secondary); opacity: 0.8; }
+        .icon-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 2px solid var(--border-icon);
+            background: var(--bg-icon-btn);
+            color: var(--text-accent);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .icon-btn:hover {
+            background: var(--text-accent);
+            color: var(--bg-container);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);
+        }
+        .icon-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .send-btn {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-btn);
+            background-position: right center;
+        }
+        .send-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .typing-indicator {
+            display: none;
+            padding: 5px 25px;
+            font-size: 14px;
+            color: var(--text-accent);
+            font-weight: 600;
+            font-style: italic;
+            background: var(--bg-typing);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .typing-indicator.active { display: flex; align-items: center; gap: 5px; }
+        .typing-indicator.active::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 8px;
+            background: linear-gradient(90deg, #667eea, #f093fb);
+            border-radius: 4px;
+            animation: typingBounce 1s infinite ease-in-out;
+        }
+        @keyframes typingBounce {
+            0%, 100% { opacity: 0.3; transform: scaleX(0.5); }
+            50% { opacity: 1; transform: scaleX(1.2); }
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar { width: 8px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--scrollbar);
+            border-radius: 4px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        .chat-messages::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="chat-header-title">
+                <h1>Guruji</h1>
+                <p>Powered by Kimi-K2.6 via Azure AI Foundry</p>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9788;</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="avatar">G</div>
+                <div class="message-content">Namaste! I am Guruji, your wise AI assistant. How may I assist you today?</div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">Guruji is thinking...</div>
+
+        <div class="chat-input-area">
+            <div class="attachments-bar" id="attachmentsBar"></div>
+            <div class="chat-controls">
+                <input type="file" id="fileInput" style="display:none" accept=".txt,.js,.py,.json,.md,.csv,.html,.css,.xml,.yaml,.yml,.log,.sql,.java,.cpp,.c,.h,.ts,.jsx,.tsx,.sh,.bat,.ps1,image/*">
+                <button class="icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach file">&#128206;</button>
+                <input type="text" id="userInput" placeholder="Ask Guruji anything..." autocomplete="off">
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme setup
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            themeToggle.innerHTML = theme === 'dark' ? '&#9790;' : '&#9788;';
+            themeToggle.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            localStorage.setItem('guruji-theme', theme);
+        }
+
+        const savedTheme = localStorage.getItem('guruji-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        // Chat logic
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const attachBtn = document.getElementById('attachBtn');
+        const fileInput = document.getElementById('fileInput');
+        const attachmentsBar = document.getElementById('attachmentsBar');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        // System prompt defines Guruji's personality
+        let messages = [
+            { role: "system", content: "You are Guruji, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom." }
+        ];
+
+        let pendingFile = null;
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function appendMessage(role, text, isImage = false, imageSrc = '') {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            let contentHtml = escapeHtml(text);
+            if (isImage && imageSrc) {
+                contentHtml += `<br><img src="${imageSrc}" alt="Uploaded image">`;
+            }
+            div.innerHTML = `
+                <div class="avatar">${role === 'user' ? 'U' : 'G'}</div>
+                <div class="message-content">${contentHtml}</div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return div.querySelector('.message-content');
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/\n/g, "<br>");
+        }
+
+        async function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            attachBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (data.error) throw new Error(data.error);
+
+                pendingFile = { ...data, name: file.name };
+                renderAttachment();
+            } catch (err) {
+                alert('Upload failed: ' + err.message);
+            } finally {
+                attachBtn.disabled = false;
+                fileInput.value = '';
+            }
+        }
+
+        function renderAttachment() {
+            attachmentsBar.innerHTML = '';
+            if (!pendingFile) return;
+
+            const chip = document.createElement('div');
+            chip.className = 'attachment-chip';
+            const icon = pendingFile.type === 'image' ? '&#128444;' : '&#128196;';
+            chip.innerHTML = `
+                <span>${icon} ${pendingFile.name}</span>
+                <button onclick="removeAttachment()">&times;</button>
+            `;
+            attachmentsBar.appendChild(chip);
+        }
+
+        window.removeAttachment = function() {
+            pendingFile = null;
+            renderAttachment();
+        };
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text && !pendingFile) return;
+
+            // Build user message
+            let userMessageContent = text || '';
+            let displayText = text || '';
+            let isImage = false;
+            let imageSrc = '';
+
+            if (pendingFile) {
+                if (pendingFile.type === 'text') {
+                    userMessageContent = `File: ${pendingFile.name}\n\`\`\`\n${pendingFile.content}\n\`\`\`\n\n${text}`;
+                    displayText = `[File: ${pendingFile.name}] ${text}`;
+                } else if (pendingFile.type === 'image') {
+                    isImage = true;
+                    imageSrc = pendingFile.base64;
+                    displayText = text || '[Image uploaded]';
+                }
+            }
+
+            // Show user message in UI
+            appendMessage('user', displayText, isImage, imageSrc);
+            userInput.value = '';
+
+            // Build message for API
+            let apiMessage;
+            if (pendingFile && pendingFile.type === 'image') {
+                apiMessage = {
+                    role: 'user',
+                    content: [
+                        { type: 'text', text: text || 'Please analyze this image.' },
+                        { type: 'image_url', image_url: { url: pendingFile.base64 } }
+                    ]
+                };
+            } else {
+                apiMessage = { role: 'user', content: userMessageContent };
+            }
+            messages.push(apiMessage);
+            pendingFile = null;
+            renderAttachment();
+
+            sendBtn.disabled = true;
+            typingIndicator.classList.add('active');
+
+            try {
+                // Create placeholder for streaming response
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot';
+                botDiv.innerHTML = `
+                    <div class="avatar">G</div>
+                    <div class="message-content" id="streamingContent"></div>
+                `;
+                chatMessages.appendChild(botDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                const contentDiv = document.getElementById('streamingContent');
+
+                // Call streaming endpoint
+                const res = await fetch('/api/chat/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: messages })
+                });
+
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let fullResponse = '';
+
+                typingIndicator.classList.remove('active');
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Keep incomplete line
+
+                    for (const line of lines) {
+                        if (!line.trim()) continue;
+                        try {
+                            const data = JSON.parse(line);
+                            if (data.error) throw new Error(data.error);
+                            if (data.done) break;
+                            if (data.content) {
+                                fullResponse += data.content;
+                                contentDiv.textContent = fullResponse;
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                        } catch (e) {
+                            // Ignore parse errors for incomplete chunks
+                        }
+                    }
+                }
+
+                // Remove the id so next message doesn't conflict
+                contentDiv.removeAttribute('id');
+
+                messages.push({ role: 'assistant', content: fullResponse });
+            } catch (err) {
+                appendMessage('bot', 'Sorry, there was an error connecting to the brain: ' + err.message);
+            } finally {
+                sendBtn.disabled = false;
+                typingIndicator.classList.remove('active');
+                userInput.focus();
+            }
+        }
+    </script>
+</body>
+</html>

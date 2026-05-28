@@ -1,0 +1,15 @@
+{
+  "name": "guruji-webapp",
+  "version": "1.1.0",
+  "description": "Browser-based AI assistant powered by Kimi-K2.6 via Azure AI Foundry",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.47.1"
+  }
+}
