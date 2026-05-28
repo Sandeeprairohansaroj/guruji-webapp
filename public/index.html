@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@
 
     <style>
         :root {
-            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --bg-body: #f5f5f0;
             --bg-container: rgba(255, 255, 255, 0.95);
             --bg-messages: #f0f4ff;
             --bg-input: rgba(255, 255, 255, 0.9);
@@ -96,6 +96,8 @@
 
             --code-bg: #0d0d15;
             --code-text: #e0e0e0;
+
+            --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
 
             /* Fallback persona vars (Thinky dark) */
             --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1029,7 +1031,6 @@
         const personaThemes = {
             guruji: {
                 light: {
-                    '--bg-body': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
                     '--bg-user': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
@@ -1053,7 +1054,6 @@
                     '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)'
                 },
                 dark: {
-                    '--bg-body': 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)',
                     '--bg-user': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
@@ -1079,7 +1079,6 @@
             },
             coder: {
                 light: {
-                    '--bg-body': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
                     '--bg-user': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #0984e3 0%, #74b9ff 100%)',
@@ -1103,7 +1102,6 @@
                     '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)'
                 },
                 dark: {
-                    '--bg-body': 'linear-gradient(135deg, #0a0f0d 0%, #0d1f17 50%, #0d2b1d 100%)',
                     '--bg-user': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
@@ -1129,7 +1127,6 @@
             },
             teacher: {
                 light: {
-                    '--bg-body': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
                     '--bg-user': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #ff7675 0%, #fd79a8 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #0984e3 0%, #74b9ff 100%)',
@@ -1153,7 +1150,6 @@
                     '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)'
                 },
                 dark: {
-                    '--bg-body': 'linear-gradient(135deg, #1a120b 0%, #2d2016 50%, #3d2b1f 100%)',
                     '--bg-user': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #ff7675 0%, #fd79a8 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
@@ -1179,7 +1175,6 @@
             },
             creative: {
                 light: {
-                    '--bg-body': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
                     '--bg-user': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #ff00cc 0%, #ff6b6b 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)',
@@ -1203,7 +1198,6 @@
                     '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)'
                 },
                 dark: {
-                    '--bg-body': 'linear-gradient(135deg, #0f0518 0%, #1a0b2e 50%, #2d1045 100%)',
                     '--bg-user': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #ff00cc 0%, #ff6b6b 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)',
@@ -1229,7 +1223,6 @@
             },
             'it-engineer': {
                 light: {
-                    '--bg-body': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
                     '--bg-user': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #e74c3c 0%, #e67e22 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #00cec9 0%, #81ecec 100%)',
@@ -1253,7 +1246,6 @@
                     '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)'
                 },
                 dark: {
-                    '--bg-body': 'linear-gradient(135deg, #0a0f13 0%, #111b24 50%, #16202b 100%)',
                     '--bg-user': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #e74c3c 0%, #e67e22 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #81ecec 0%, #00cec9 100%)',
@@ -1279,7 +1271,6 @@
             },
             scientist: {
                 light: {
-                    '--bg-body': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
                     '--bg-user': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #e65100 0%, #f57c00 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #00838f 0%, #4dd0e1 100%)',
@@ -1303,7 +1294,6 @@
                     '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)'
                 },
                 dark: {
-                    '--bg-body': 'linear-gradient(135deg, #050a14 0%, #0a1224 50%, #0d1b2a 100%)',
                     '--bg-user': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
                     '--bg-avatar-user': 'linear-gradient(135deg, #e65100 0%, #f57c00 100%)',
                     '--bg-avatar-bot': 'linear-gradient(135deg, #4dd0e1 0%, #00838f 100%)',
@@ -1839,15 +1829,15 @@
 
                 const btn = document.createElement('button');
                 btn.className = 'copy-code-btn';
-                btn.innerHTML = '📋 Copy';
+                btn.innerHTML = 'ðŸ“‹ Copy';
                 btn.onclick = () => {
                     const code = pre.querySelector('code') || pre;
                     navigator.clipboard.writeText(code.textContent).then(() => {
                         btn.classList.add('copied');
-                        btn.textContent = '✅ Copied';
+                        btn.textContent = 'âœ… Copied';
                         setTimeout(() => {
                             btn.classList.remove('copied');
-                            btn.innerHTML = '📋 Copy';
+                            btn.innerHTML = 'ðŸ“‹ Copy';
                         }, 2000);
                     });
                 };
