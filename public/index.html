@@ -639,6 +639,42 @@
             box-shadow: 0 4px 12px var(--shadow-btn-soft);
         }
         .icon-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .mic-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 2px solid var(--border-icon);
+            background: var(--bg-icon-btn);
+            color: var(--text-accent);
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .mic-btn:hover {
+            background: var(--text-accent);
+            color: var(--bg-container);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-btn-soft);
+        }
+        .mic-btn.listening {
+            background: #e74c3c;
+            border-color: #e74c3c;
+            color: white;
+            animation: micPulse 1.2s infinite ease-in-out;
+        }
+        .mic-btn.listening:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+        @keyframes micPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(231, 76, 60, 0); }
+        }
         .send-btn {
             padding: 14px 28px;
             background: var(--save-btn-bg);
@@ -925,6 +961,7 @@
                 <input type="file" id="fileInput" style="display:none" accept=".txt,.js,.py,.json,.md,.csv,.html,.css,.xml,.yaml,.yml,.log,.sql,.java,.cpp,.c,.h,.ts,.jsx,.tsx,.sh,.bat,.ps1,image/*">
                 <button class="icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach file">&#128206;</button>
                 <input type="text" id="userInput" placeholder="Ask Thinky anything..." autocomplete="off">
+                <button class="mic-btn" id="micBtn" title="Click & speak">&#127908;</button>
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </div>
@@ -1295,6 +1332,90 @@
         sendBtn.addEventListener('click', sendMessage);
 
         fileInput.addEventListener('change', handleFileSelect);
+
+        // ==================== SPEECH-TO-TEXT (MIC) ====================
+        const micBtn = document.getElementById('micBtn');
+        let recognition = null;
+        let isListening = false;
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('listening');
+                micBtn.title = 'Listening... click to stop';
+                userInput.placeholder = 'Listening...';
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                micBtn.classList.remove('listening');
+                micBtn.title = 'Click & speak';
+                userInput.placeholder = 'Ask Thinky anything...';
+            };
+
+            recognition.onresult = (event) => {
+                let finalTranscript = '';
+                let interimTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                // Append final transcript to input, keep interim as placeholder/visual feedback
+                if (finalTranscript) {
+                    const current = userInput.value.trim();
+                    userInput.value = current ? current + ' ' + finalTranscript : finalTranscript;
+                }
+                if (interimTranscript) {
+                    userInput.placeholder = interimTranscript;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.warn('Speech recognition error:', event.error);
+                if (event.error === 'not-allowed') {
+                    alert('Microphone permission denied. Please allow microphone access in your browser settings.');
+                } else if (event.error === 'no-speech') {
+                    // User didn't speak, just stop silently
+                } else {
+                    alert('Speech recognition error: ' + event.error);
+                }
+                isListening = false;
+                micBtn.classList.remove('listening');
+                micBtn.title = 'Click & speak';
+                userInput.placeholder = 'Ask Thinky anything...';
+            };
+
+            micBtn.addEventListener('click', () => {
+                if (isListening) {
+                    recognition.stop();
+                } else {
+                    // Clear placeholder interim text
+                    if (userInput.placeholder !== 'Ask Thinky anything...') {
+                        userInput.placeholder = 'Ask Thinky anything...';
+                    }
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.warn('Could not start recognition:', e);
+                    }
+                }
+            });
+        } else {
+            micBtn.style.display = 'none';
+            console.warn('Web Speech API not supported in this browser.');
+        }
 
         // ==================== PERSONA SYSTEM ====================
         const defaultPersonas = [
