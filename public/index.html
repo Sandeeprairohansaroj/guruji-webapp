@@ -59,6 +59,7 @@
             --speaker-bg: rgba(118,75,162,0.1);
             --option-sel-1: rgba(102,126,234,0.08);
             --option-sel-2: rgba(240,147,251,0.08);
+            --glow-color: rgba(118, 75, 162, 0.6);
 
             --text-primary: #333;
             --text-secondary: #666;
@@ -128,6 +129,7 @@
             --speaker-bg: rgba(165,180,252,0.1);
             --option-sel-1: rgba(102,126,234,0.08);
             --option-sel-2: rgba(240,147,251,0.08);
+            --glow-color: rgba(165, 180, 252, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -283,6 +285,44 @@
             overflow: hidden;
             transition: background 0.3s ease;
             border: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: conic-gradient(from 0deg, transparent, var(--glow-color), transparent, var(--glow-color), transparent);
+            border-radius: 24px;
+            z-index: -1;
+            animation: rotateGlow 4s linear infinite;
+            filter: blur(6px);
+            opacity: 0.8;
+        }
+        .chat-container::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            z-index: -1;
+            box-shadow: 0 0 25px var(--glow-color), 0 0 50px var(--glow-color);
+            animation: pulseGlow 2.5s ease-in-out infinite;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color); }
+            50% { opacity: 0.7; box-shadow: 0 0 35px var(--glow-color), 0 0 70px var(--glow-color); }
         }
         .chat-header {
             position: relative;
@@ -1191,7 +1231,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     '--header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
                     '--speaker-bg': 'rgba(118,75,162,0.1)',
-                    '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)'
+                    '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)',
+                    '--glow-color': 'rgba(118, 75, 162, 0.6)'
                 },
                 dark: {
                     '--bg-user': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -1214,7 +1255,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     '--header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
                     '--speaker-bg': 'rgba(165,180,252,0.1)',
-                    '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)'
+                    '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)',
+                    '--glow-color': 'rgba(165, 180, 252, 0.6)'
                 }
             },
             coder: {
@@ -1239,7 +1281,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
                     '--header-bg': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
                     '--speaker-bg': 'rgba(26,92,58,0.1)',
-                    '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)'
+                    '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)',
+                    '--glow-color': 'rgba(17, 153, 142, 0.6)'
                 },
                 dark: {
                     '--bg-user': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
@@ -1262,7 +1305,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
                     '--header-bg': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
                     '--speaker-bg': 'rgba(85,239,196,0.1)',
-                    '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)'
+                    '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)',
+                    '--glow-color': 'rgba(85, 239, 196, 0.6)'
                 }
             },
             teacher: {
@@ -1287,7 +1331,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
                     '--header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
                     '--speaker-bg': 'rgba(211,84,0,0.1)',
-                    '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)'
+                    '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)',
+                    '--glow-color': 'rgba(243, 156, 18, 0.6)'
                 },
                 dark: {
                     '--bg-user': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
@@ -1310,7 +1355,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
                     '--header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
                     '--speaker-bg': 'rgba(241,196,15,0.1)',
-                    '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)'
+                    '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)',
+                    '--glow-color': 'rgba(241, 196, 15, 0.6)'
                 }
             },
             creative: {
@@ -1335,7 +1381,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
                     '--header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
                     '--speaker-bg': 'rgba(74,0,224,0.1)',
-                    '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)'
+                    '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)',
+                    '--glow-color': 'rgba(142, 45, 226, 0.6)'
                 },
                 dark: {
                     '--bg-user': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
@@ -1358,7 +1405,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
                     '--header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
                     '--speaker-bg': 'rgba(212,165,255,0.1)',
-                    '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)'
+                    '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)',
+                    '--glow-color': 'rgba(212, 165, 255, 0.6)'
                 }
             },
             'it-engineer': {
@@ -1383,7 +1431,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
                     '--header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
                     '--speaker-bg': 'rgba(41,128,185,0.1)',
-                    '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)'
+                    '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)',
+                    '--glow-color': 'rgba(52, 152, 219, 0.6)'
                 },
                 dark: {
                     '--bg-user': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
@@ -1406,7 +1455,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
                     '--header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
                     '--speaker-bg': 'rgba(129,236,236,0.1)',
-                    '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)'
+                    '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)',
+                    '--glow-color': 'rgba(129, 236, 236, 0.6)'
                 }
             },
             scientist: {
@@ -1431,7 +1481,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
                     '--header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
                     '--speaker-bg': 'rgba(40,53,147,0.1)',
-                    '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)'
+                    '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)',
+                    '--glow-color': 'rgba(26, 35, 126, 0.6)'
                 },
                 dark: {
                     '--bg-user': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
@@ -1454,7 +1505,8 @@
                     '--table-header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
                     '--header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
                     '--speaker-bg': 'rgba(144,202,249,0.1)',
-                    '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)'
+                    '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)',
+                    '--glow-color': 'rgba(144, 202, 249, 0.6)'
                 }
             }
         };
