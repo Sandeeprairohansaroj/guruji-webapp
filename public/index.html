@@ -198,6 +198,35 @@
             transform: scale(1.1);
             box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
+        .voice-model-toggle {
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .voice-model-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 0 12px rgba(255,255,255,0.3);
+        }
+        .voice-model-toggle .dropdown-arrow {
+            font-size: 10px;
+            opacity: 0.8;
+            transition: transform 0.3s;
+        }
+        .voice-model-toggle.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
         .tts-toggle.active {
             background: rgba(46, 204, 113, 0.4);
             border-color: rgba(46, 204, 113, 0.8);
@@ -918,12 +947,14 @@
         <div class="chat-header">
             <div class="chat-header-title">
                 <h1>Thinky</h1>
-                <p>Powered by Kimi-K2.6 via Azure AI Foundry</p>
                 <span class="persona-badge" id="personaBadge">Thinky</span>
             </div>
             <div class="header-controls">
                 <button class="tts-toggle" id="ttsToggle" title="Toggle auto-speak">&#128264;</button>
-                <button class="theme-toggle" id="voiceToggle" title="Choose voice">&#127908;</button>
+                <button class="voice-model-toggle" id="voiceToggle" title="Choose voice">
+                    <span>Change Voice Model</span>
+                    <span class="dropdown-arrow">&#9662;</span>
+                </button>
                 <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9788;</button>
             </div>
         </div>
@@ -1664,6 +1695,7 @@
 
         voiceToggle.addEventListener('click', () => {
             voicePanel.classList.toggle('open');
+            voiceToggle.classList.toggle('open', voicePanel.classList.contains('open'));
             if (voicePanel.classList.contains('open') && allVoices.length === 0) {
                 loadVoices();
             }
@@ -1671,8 +1703,9 @@
 
         // Close voice panel when clicking outside
         document.addEventListener('click', (e) => {
-            if (!voicePanel.contains(e.target) && e.target !== voiceToggle) {
+            if (!voicePanel.contains(e.target) && e.target !== voiceToggle && !voiceToggle.contains(e.target)) {
                 voicePanel.classList.remove('open');
+                voiceToggle.classList.remove('open');
             }
         });
 
