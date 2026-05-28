@@ -268,6 +268,201 @@
             opacity: 0.7;
             flex-shrink: 0;
         }
+
+        /* ==================== PERSONA SWITCHER ==================== */
+        .persona-badge {
+            font-size: 11px;
+            color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.15);
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .persona-badge:hover {
+            background: rgba(255,255,255,0.25);
+        }
+        .persona-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 300px;
+            max-height: 450px;
+            overflow-y: auto;
+            background: var(--bg-container);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow-container);
+            padding: 16px;
+            z-index: 1001;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+        .persona-panel.open { display: block; }
+        .persona-panel h3 {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .persona-option {
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            border: 2px solid var(--border-primary);
+            background: var(--bg-input);
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .persona-option:hover {
+            border-color: var(--border-input-focus);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102,126,234,0.15);
+        }
+        .persona-option.selected {
+            border-color: var(--border-input-focus);
+            background: linear-gradient(90deg, rgba(102,126,234,0.08), rgba(240,147,251,0.08));
+            box-shadow: 0 0 0 2px rgba(102,126,234,0.2);
+        }
+        .persona-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .persona-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .persona-divider {
+            border: none;
+            border-top: 1px solid var(--border-primary);
+            margin: 12px 0;
+        }
+        .add-persona-btn {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed var(--border-primary);
+            background: transparent;
+            border-radius: 12px;
+            color: var(--text-accent);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .add-persona-btn:hover {
+            border-color: var(--border-input-focus);
+            background: var(--inline-code-bg);
+        }
+        .persona-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .persona-actions button {
+            font-size: 11px;
+            padding: 3px 8px;
+            border: 1px solid var(--border-primary);
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .persona-actions button:hover {
+            background: var(--bg-messages);
+            color: var(--text-primary);
+        }
+
+        /* Persona Modal */
+        .persona-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+        .persona-modal-overlay.open { display: flex; }
+        .persona-modal {
+            background: var(--bg-container);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 1px solid var(--border-primary);
+        }
+        .persona-modal h3 {
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            text-align: center;
+        }
+        .persona-modal label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            margin-top: 12px;
+        }
+        .persona-modal input[type="text"],
+        .persona-modal textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border-primary);
+            border-radius: 12px;
+            font-size: 14px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        .persona-modal input[type="text"]:focus,
+        .persona-modal textarea:focus {
+            border-color: var(--border-input-focus);
+        }
+        .persona-modal textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .persona-modal .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+        .persona-modal .modal-actions button {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .cancel-btn {
+            background: var(--bg-messages);
+            color: var(--text-primary);
+            border: 1px solid var(--border-primary) !important;
+        }
+        .cancel-btn:hover { background: var(--border-primary); }
+        .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
         .chat-messages {
             flex: 1;
             padding: 25px;
@@ -663,6 +858,7 @@
             <div class="chat-header-title">
                 <h1>Guruji</h1>
                 <p>Powered by Kimi-K2.6 via Azure AI Foundry</p>
+                <span class="persona-badge" id="personaBadge">Guruji</span>
             </div>
             <div class="header-controls">
                 <button class="tts-toggle" id="ttsToggle" title="Toggle auto-speak">&#128264;</button>
@@ -672,6 +868,22 @@
         </div>
 
         <div class="voice-panel" id="voicePanel"></div>
+
+        <div class="persona-panel" id="personaPanel"></div>
+
+        <div class="persona-modal-overlay" id="personaModalOverlay">
+            <div class="persona-modal">
+                <h3 id="modalTitle">Create Custom Persona</h3>
+                <label>Name</label>
+                <input type="text" id="modalPersonaName" placeholder="e.g., Sherlock Holmes">
+                <label>System Prompt</label>
+                <textarea id="modalPersonaPrompt" placeholder="Describe who this persona is and how they should respond..."></textarea>
+                <div class="modal-actions">
+                    <button class="cancel-btn" id="modalCancel">Cancel</button>
+                    <button class="save-btn" id="modalSave">Save</button>
+                </div>
+            </div>
+        </div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
@@ -932,10 +1144,169 @@
         const attachmentsBar = document.getElementById('attachmentsBar');
         const typingIndicator = document.getElementById('typingIndicator');
 
-        // System prompt defines Guruji's personality
-        let messages = [
-            { role: "system", content: "You are Guruji, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom. Use markdown formatting when helpful for readability." }
+        const personaBadge = document.getElementById('personaBadge');
+        const personaPanel = document.getElementById('personaPanel');
+        const personaModalOverlay = document.getElementById('personaModalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPersonaName = document.getElementById('modalPersonaName');
+        const modalPersonaPrompt = document.getElementById('modalPersonaPrompt');
+        const modalSave = document.getElementById('modalSave');
+        const modalCancel = document.getElementById('modalCancel');
+
+        // ==================== PERSONA SYSTEM ====================
+        const defaultPersonas = [
+            { id: 'guruji', name: 'Guruji', desc: 'Wise, warm, and helpful AI assistant.', prompt: 'You are Guruji, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom. Use markdown formatting when helpful for readability.' },
+            { id: 'coder', name: 'Coder', desc: 'Technical, concise, and code-focused.', prompt: 'You are an expert Programmer and Software Engineer. Respond with clean, efficient, well-documented code. Be concise and direct. Use code blocks for all code. Explain algorithms briefly and practically. Keep responses focused on technical correctness.' },
+            { id: 'teacher', name: 'Teacher', desc: 'Patient, engaging, and educational.', prompt: 'You are a patient and engaging Teacher who loves explaining concepts step by step. Break down complex topics into simple pieces. Use examples and analogies. Ask guided questions to help the learner think. Be encouraging and supportive.' },
+            { id: 'creative', name: 'Creative', desc: 'Poetic, imaginative, and artistic.', prompt: 'You are a creative writer, poet, and storyteller. Respond with vivid imagery, metaphors, and creative flair. Think outside the box. Use evocative language and artistic expression. Make ordinary topics feel magical and inspiring.' },
+            { id: 'it-engineer', name: 'IT Engineer', desc: 'System admin, cloud & datacenter guru.', prompt: 'You are a seasoned IT Systems Engineer, Cloud Architect, and Datacenter Expert with deep knowledge of Hyper-V, VMware, Azure, AWS, Office 365, Active Directory, networking (Cisco, routing, switching, VLANs, firewalls, VPN), storage (SAN/NAS), ITIL, PowerShell, and infrastructure automation. Provide practical, production-ready guidance. Think like a senior engineer troubleshooting real issues. Include commands, configs, and best practices.' },
+            { id: 'scientist', name: 'Scientist', desc: 'Rigorous, analytical, and evidence-based.', prompt: 'You are a rigorous Scientist and Researcher. Base your answers on evidence and logical reasoning. Cite concepts and theories where relevant. Acknowledge uncertainty when it exists. Be precise with terminology. Structure arguments clearly with hypotheses, evidence, and conclusions.' }
         ];
+        let customPersonas = JSON.parse(localStorage.getItem('guruji-custom-personas') || '[]');
+        let activePersonaId = localStorage.getItem('guruji-active-persona') || 'guruji';
+        let editingCustomId = null;
+
+        function getAllPersonas() {
+            return [...defaultPersonas, ...customPersonas];
+        }
+
+        function getActivePersona() {
+            return getAllPersonas().find(p => p.id === activePersonaId) || defaultPersonas[0];
+        }
+
+        function setPersona(id) {
+            activePersonaId = id;
+            localStorage.setItem('guruji-active-persona', id);
+            const persona = getActivePersona();
+            personaBadge.textContent = persona.name;
+            messages = [{ role: 'system', content: persona.prompt }];
+            renderPersonaPanel();
+        }
+
+        function renderPersonaPanel() {
+            const all = getAllPersonas();
+            let html = '<h3>Choose Persona</h3>';
+
+            all.forEach(p => {
+                const isCustom = customPersonas.some(cp => cp.id === p.id);
+                const isSelected = p.id === activePersonaId;
+                html += `
+                    <button class="persona-option${isSelected ? ' selected' : ''}" data-id="${p.id}">
+                        <span class="persona-name">${p.name}</span>
+                        <span class="persona-desc">${p.desc}</span>
+                        ${isCustom ? `<div class="persona-actions">
+                            <button data-action="edit" data-id="${p.id}">Edit</button>
+                            <button data-action="delete" data-id="${p.id}">Delete</button>
+                        </div>` : ''}
+                    </button>
+                `;
+            });
+
+            html += '<hr class="persona-divider">';
+            html += '<button class="add-persona-btn" id="btnAddPersona">+ Create Custom Persona</button>';
+
+            personaPanel.innerHTML = html;
+
+            // Select persona clicks
+            personaPanel.querySelectorAll('.persona-option').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if (e.target.closest('.persona-actions')) return;
+                    setPersona(btn.dataset.id);
+                    personaPanel.classList.remove('open');
+                });
+            });
+
+            // Edit/Delete
+            personaPanel.querySelectorAll('[data-action="edit"]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(btn.dataset.id);
+                });
+            });
+            personaPanel.querySelectorAll('[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm('Delete this custom persona?')) {
+                        customPersonas = customPersonas.filter(cp => cp.id !== btn.dataset.id);
+                        localStorage.setItem('guruji-custom-personas', JSON.stringify(customPersonas));
+                        if (activePersonaId === btn.dataset.id) setPersona('guruji');
+                        else renderPersonaPanel();
+                    }
+                });
+            });
+
+            // Add button
+            document.getElementById('btnAddPersona').addEventListener('click', () => openModal());
+        }
+
+        function openModal(editId = null) {
+            editingCustomId = editId;
+            if (editId) {
+                const p = customPersonas.find(cp => cp.id === editId);
+                modalTitle.textContent = 'Edit Persona';
+                modalPersonaName.value = p.name;
+                modalPersonaPrompt.value = p.prompt;
+            } else {
+                modalTitle.textContent = 'Create Custom Persona';
+                modalPersonaName.value = '';
+                modalPersonaPrompt.value = '';
+            }
+            personaModalOverlay.classList.add('open');
+            modalPersonaName.focus();
+        }
+
+        function closeModal() {
+            personaModalOverlay.classList.remove('open');
+            editingCustomId = null;
+        }
+
+        modalSave.addEventListener('click', () => {
+            const name = modalPersonaName.value.trim();
+            const prompt = modalPersonaPrompt.value.trim();
+            if (!name || !prompt) {
+                alert('Please fill in both name and prompt.');
+                return;
+            }
+            if (editingCustomId) {
+                const p = customPersonas.find(cp => cp.id === editingCustomId);
+                p.name = name;
+                p.desc = prompt.substring(0, 80) + (prompt.length > 80 ? '...' : '');
+                p.prompt = prompt;
+            } else {
+                customPersonas.push({
+                    id: 'custom-' + Date.now(),
+                    name,
+                    desc: prompt.substring(0, 80) + (prompt.length > 80 ? '...' : ''),
+                    prompt
+                });
+            }
+            localStorage.setItem('guruji-custom-personas', JSON.stringify(customPersonas));
+            renderPersonaPanel();
+            closeModal();
+        });
+
+        modalCancel.addEventListener('click', closeModal);
+        personaModalOverlay.addEventListener('click', (e) => {
+            if (e.target === personaModalOverlay) closeModal();
+        });
+
+        personaBadge.addEventListener('click', () => {
+            personaPanel.classList.toggle('open');
+            voicePanel.classList.remove('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!personaPanel.contains(e.target) && e.target !== personaBadge) {
+                personaPanel.classList.remove('open');
+            }
+        });
+
+        // Initialize system message with active persona
+        let messages = [
+            { role: 'system', content: getActivePersona().prompt }
+        ];
+        personaBadge.textContent = getActivePersona().name;
+        renderPersonaPanel();
 
         let pendingFile = null;
 
