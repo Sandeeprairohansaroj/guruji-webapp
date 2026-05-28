@@ -925,7 +925,7 @@
                 <input type="file" id="fileInput" style="display:none" accept=".txt,.js,.py,.json,.md,.csv,.html,.css,.xml,.yaml,.yml,.log,.sql,.java,.cpp,.c,.h,.ts,.jsx,.tsx,.sh,.bat,.ps1,image/*">
                 <button class="icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach file">&#128206;</button>
                 <input type="text" id="userInput" placeholder="Ask Guruji anything..." autocomplete="off">
-                <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+                <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </div>
     </div>
@@ -1286,6 +1286,15 @@
         const modalPersonaPrompt = document.getElementById('modalPersonaPrompt');
         const modalSave = document.getElementById('modalSave');
         const modalCancel = document.getElementById('modalCancel');
+        let pendingFile = null;
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+
+        fileInput.addEventListener('change', handleFileSelect);
 
         // ==================== PERSONA SYSTEM ====================
         const defaultPersonas = [
