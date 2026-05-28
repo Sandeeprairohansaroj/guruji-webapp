@@ -129,6 +129,7 @@
             border: 2px solid rgba(255,255,255,0.2);
         }
         .chat-header {
+            position: relative;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: var(--text-header);
             padding: 20px 25px;
@@ -215,6 +216,57 @@
             background: #2ecc71;
             color: white;
             animation: speakPulse 1s infinite ease-in-out;
+        }
+        .voice-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 280px;
+            max-height: 350px;
+            overflow-y: auto;
+            background: var(--bg-container);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow-container);
+            padding: 12px;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+        .voice-panel.open { display: block; }
+        .voice-panel h4 {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 8px 0 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .voice-panel h4:first-child { margin-top: 0; }
+        .voice-option {
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .voice-option:hover { background: var(--inline-code-bg); }
+        .voice-option.selected {
+            background: linear-gradient(90deg, rgba(102,126,234,0.15), rgba(240,147,251,0.15));
+            font-weight: 600;
+            color: var(--text-accent);
+        }
+        .voice-option .vgender {
+            font-size: 11px;
+            opacity: 0.7;
+            flex-shrink: 0;
         }
         .chat-messages {
             flex: 1;
@@ -585,9 +637,12 @@
             </div>
             <div class="header-controls">
                 <button class="tts-toggle" id="ttsToggle" title="Toggle auto-speak">&#128264;</button>
+                <button class="theme-toggle" id="voiceToggle" title="Choose voice">&#127908;</button>
                 <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9788;</button>
             </div>
         </div>
+
+        <div class="voice-panel" id="voicePanel"></div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
@@ -637,19 +692,105 @@
 
         // ==================== TEXT-TO-SPEECH ====================
         const ttsToggle = document.getElementById('ttsToggle');
+        const voiceToggle = document.getElementById('voiceToggle');
+        const voicePanel = document.getElementById('voicePanel');
         let ttsEnabled = localStorage.getItem('guruji-tts') === 'true';
         let currentUtterance = null;
         let currentSpeakingBtn = null;
+        let selectedVoiceName = localStorage.getItem('guruji-voice') || '';
+        let allVoices = [];
 
-        // Load voices when available
-        let voices = [];
+        function getVoiceGender(voice) {
+            const nameLower = voice.name.toLowerCase();
+            const femaleKeywords = ['female', 'zira', 'catherine', 'hazel', 'susan', 'amy', 'emma', 'joanna',
+                'kendra', 'kimberly', 'salli', 'ivy', 'raveena', 'aditi', 'vicki', 'tessa',
+                'nicole', 'olivia', 'mia', 'zhiyu', 'dora', 'sofia', 'laura', 'ines', 'mathilde',
+                'lea', 'lena', 'lisa', 'marlene', 'viktoriya', 'hilary', 'ayanda'];
+            const maleKeywords = ['male', 'david', 'mark', 'george', 'matthew', 'justin', 'joey', 'kevin',
+                'enrique', 'hans', 'giorgio', 'takumi', 'ruben', 'arthur', 'daniel', 'rupert',
+                'kunal', 'gabriel', 'liam', 'jorge', 'carlos', 'ricardo', 'diego', 'miguel',
+                'javier', 'fernando', 'andres', 'guillaume', 'thomas', 'geraint', 'jason',
+                'tony', 'hiujin'];
+            if (femaleKeywords.some(k => nameLower.includes(k))) return 'Female';
+            if (maleKeywords.some(k => nameLower.includes(k))) return 'Male';
+            return 'Neutral';
+        }
+
+        function buildVoicePanel() {
+            if (!allVoices.length) {
+                voicePanel.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Loading voices...</div>';
+                return;
+            }
+            const english = allVoices.filter(v => v.lang.startsWith('en'));
+            const others = allVoices.filter(v => !v.lang.startsWith('en'));
+
+            let html = '';
+            const addGroup = (title, voicesList) => {
+                if (!voicesList.length) return;
+                const maleV = voicesList.filter(v => getVoiceGender(v) === 'Male');
+                const femaleV = voicesList.filter(v => getVoiceGender(v) === 'Female');
+                const neutV = voicesList.filter(v => getVoiceGender(v) === 'Neutral');
+
+                const render = (list) => list.map(v => {
+                    const isSel = v.name === selectedVoiceName;
+                    const icon = getVoiceGender(v) === 'Female' ? '&#9792;' : '&#9794;';
+                    return `<button class="voice-option${isSel ? ' selected' : ''}" data-name="${v.name}">
+                        <span>${v.name}</span>
+                        <span class="vgender">${icon} ${getVoiceGender(v)}</span>
+                    </button>`;
+                }).join('');
+
+                html += `<h4>${title}</h4>`;
+                if (femaleV.length) { html += '<div style="margin-bottom:6px;">'; html += render(femaleV); html += '</div>'; }
+                if (maleV.length) { html += '<div style="margin-bottom:6px;">'; html += render(maleV); html += '</div>'; }
+                if (neutV.length) { html += '<div>'; html += render(neutV); html += '</div>'; }
+            };
+
+            addGroup('English Voices', english);
+            addGroup('Other Languages', others);
+            voicePanel.innerHTML = html;
+
+            voicePanel.querySelectorAll('.voice-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    voicePanel.querySelectorAll('.voice-option').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedVoiceName = btn.dataset.name;
+                    localStorage.setItem('guruji-voice', selectedVoiceName);
+                    // Preview
+                    const voice = allVoices.find(v => v.name === selectedVoiceName);
+                    if (voice) {
+                        const u = new SpeechSynthesisUtterance('Hello, I am Guruji.');
+                        u.voice = voice;
+                        window.speechSynthesis.speak(u);
+                    }
+                });
+            });
+        }
+
         function loadVoices() {
-            voices = window.speechSynthesis.getVoices();
+            allVoices = window.speechSynthesis.getVoices();
+            if (allVoices.length) buildVoicePanel();
         }
         loadVoices();
         if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
+            window.speechSynthesis.onvoiceschanged = () => {
+                loadVoices();
+            };
         }
+
+        voiceToggle.addEventListener('click', () => {
+            voicePanel.classList.toggle('open');
+            if (voicePanel.classList.contains('open') && allVoices.length === 0) {
+                loadVoices();
+            }
+        });
+
+        // Close voice panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!voicePanel.contains(e.target) && e.target !== voiceToggle) {
+                voicePanel.classList.remove('open');
+            }
+        });
 
         function updateTtsToggle() {
             ttsToggle.classList.toggle('active', ttsEnabled);
@@ -669,15 +810,15 @@
 
         function stripMarkdown(text) {
             return text
-                .replace(/```[\s\S]*?```/g, ' code block ')   // code blocks
-                .replace(/`([^`]+)`/g, '$1')                    // inline code
-                .replace(/\*\*(.*?)\*\*/g, '$1')               // bold
-                .replace(/\*(.*?)\*/g, '$1')                    // italic
-                .replace(/#+\s/g, '')                          // headers
-                .replace(/\[(.*?)\]\(.*?\)/g, '$1')            // links
-                .replace(/!\[.*?\]\(.*?\)/g, '')               // images
-                .replace(/\|/g, ' ')                            // tables
-                .replace(/\n{2,}/g, '\n')                       // extra newlines
+                .replace(/```[\s\S]*?```/g, ' code block ')
+                .replace(/`([^`]+)`/g, '$1')
+                .replace(/\*\*(.*?)\*\*/g, '$1')
+                .replace(/\*(.*?)\*/g, '$1')
+                .replace(/#+\s/g, '')
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+                .replace(/!\[.*?\]\(.*?\)/g, '')
+                .replace(/\|/g, ' ')
+                .replace(/\n{2,}/g, '\n')
                 .trim();
         }
 
@@ -705,13 +846,10 @@
             utterance.pitch = 1;
             utterance.volume = 1;
 
-            // Prefer a good English voice
-            const preferred = voices.find(v => v.name.includes('Google US English'))
-                || voices.find(v => v.name.includes('Microsoft Zira'))
-                || voices.find(v => v.lang === 'en-US')
-                || voices.find(v => v.lang.startsWith('en'))
-                || voices[0];
-            if (preferred) utterance.voice = preferred;
+            // Use selected voice if available, otherwise fallback
+            const selected = allVoices.find(v => v.name === selectedVoiceName);
+            const fallback = allVoices.find(v => v.lang === 'en-US') || allVoices.find(v => v.lang.startsWith('en')) || allVoices[0];
+            utterance.voice = selected || fallback;
 
             utterance.onstart = () => {
                 if (btn) {
