@@ -24,6 +24,7 @@
     <style>
         :root {
             --bg-body: #f5f5f0;
+            --bg-sidebar: #ffffff;
             --bg-container: rgba(255, 255, 255, 0.95);
             --bg-messages: #f0f4ff;
             --bg-input: rgba(255, 255, 255, 0.9);
@@ -98,6 +99,7 @@
             --code-text: #e0e0e0;
 
             --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            --bg-sidebar: #1e1e2e;
 
             /* Fallback persona vars (Thinky dark) */
             --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -134,10 +136,140 @@
             background: var(--bg-body);
             height: 100vh;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
+            padding: 0 20px;
+            gap: 20px;
             color: var(--text-primary);
             transition: color 0.3s ease;
+        }
+        .sidebar {
+            width: 260px;
+            height: 90vh;
+            background: var(--bg-sidebar);
+            border-radius: 20px;
+            box-shadow: var(--shadow-container);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.3s ease;
+            border: 1px solid var(--border-primary);
+            flex-shrink: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        .sidebar-header h2 {
+            font-size: 20px;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+        .sidebar-personas {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sidebar-personas::-webkit-scrollbar { width: 6px; }
+        .sidebar-personas::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-personas::-webkit-scrollbar-thumb {
+            background: var(--scrollbar);
+            border-radius: 3px;
+        }
+        .agent-card {
+            width: 100%;
+            text-align: left;
+            padding: 14px 16px;
+            border: 2px solid transparent;
+            background: var(--bg-input);
+            border-radius: 14px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .agent-card.selected {
+            background: var(--bg-messages);
+            font-weight: 600;
+        }
+        .agent-card .agent-name {
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .agent-card .agent-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .agent-card .agent-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .agent-card .agent-actions button {
+            font-size: 11px;
+            padding: 3px 8px;
+            border: 1px solid var(--border-primary);
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .agent-card .agent-actions button:hover {
+            background: var(--bg-messages);
+            color: var(--text-primary);
+        }
+        .agent-glow-guruji { border-color: rgba(118,75,162,0.25); box-shadow: 0 0 8px rgba(118,75,162,0.15); }
+        .agent-glow-guruji:hover, .agent-glow-guruji.selected { border-color: rgba(118,75,162,0.5); box-shadow: 0 0 14px rgba(118,75,162,0.35); }
+        .agent-glow-coder { border-color: rgba(17,153,142,0.25); box-shadow: 0 0 8px rgba(17,153,142,0.15); }
+        .agent-glow-coder:hover, .agent-glow-coder.selected { border-color: rgba(17,153,142,0.5); box-shadow: 0 0 14px rgba(17,153,142,0.35); }
+        .agent-glow-teacher { border-color: rgba(243,156,18,0.25); box-shadow: 0 0 8px rgba(243,156,18,0.15); }
+        .agent-glow-teacher:hover, .agent-glow-teacher.selected { border-color: rgba(243,156,18,0.5); box-shadow: 0 0 14px rgba(243,156,18,0.35); }
+        .agent-glow-creative { border-color: rgba(142,45,226,0.25); box-shadow: 0 0 8px rgba(142,45,226,0.15); }
+        .agent-glow-creative:hover, .agent-glow-creative.selected { border-color: rgba(142,45,226,0.5); box-shadow: 0 0 14px rgba(142,45,226,0.35); }
+        .agent-glow-it-engineer { border-color: rgba(52,152,219,0.25); box-shadow: 0 0 8px rgba(52,152,219,0.15); }
+        .agent-glow-it-engineer:hover, .agent-glow-it-engineer.selected { border-color: rgba(52,152,219,0.5); box-shadow: 0 0 14px rgba(52,152,219,0.35); }
+        .agent-glow-scientist { border-color: rgba(26,35,126,0.25); box-shadow: 0 0 8px rgba(26,35,126,0.15); }
+        .agent-glow-scientist:hover, .agent-glow-scientist.selected { border-color: rgba(26,35,126,0.5); box-shadow: 0 0 14px rgba(26,35,126,0.35); }
+        .agent-glow-custom { border-color: rgba(100,100,100,0.25); box-shadow: 0 0 8px rgba(100,100,100,0.15); }
+        .agent-glow-custom:hover, .agent-glow-custom.selected { border-color: rgba(100,100,100,0.5); box-shadow: 0 0 14px rgba(100,100,100,0.25); }
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-primary);
+        }
+        .add-agent-btn {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed var(--border-primary);
+            background: transparent;
+            border-radius: 12px;
+            color: var(--text-accent);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            text-align: center;
+        }
+        .add-agent-btn:hover {
+            border-color: var(--border-input-focus);
+            background: var(--inline-code-bg);
         }
         .chat-container {
             width: 90%;
@@ -945,6 +1077,16 @@
     </style>
 </head>
 <body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Agents</h2>
+        </div>
+        <div class="sidebar-personas" id="sidebarPersonas"></div>
+        <div class="sidebar-footer">
+            <button class="add-agent-btn" id="btnAddPersonaSidebar">+ Create Custom Persona</button>
+        </div>
+    </div>
+
     <div class="chat-container">
         <div class="chat-header">
             <div class="chat-header-title">
@@ -962,8 +1104,6 @@
         </div>
 
         <div class="voice-panel" id="voicePanel"></div>
-
-        <div class="persona-panel" id="personaPanel"></div>
 
         <div class="persona-modal-overlay" id="personaModalOverlay">
             <div class="persona-modal">
@@ -1469,18 +1609,30 @@
             applyPersonaTheme(id);
         }
 
+        function getAgentGlowClass(id) {
+            if (id === 'guruji') return 'agent-glow-guruji';
+            if (id === 'coder') return 'agent-glow-coder';
+            if (id === 'teacher') return 'agent-glow-teacher';
+            if (id === 'creative') return 'agent-glow-creative';
+            if (id === 'it-engineer') return 'agent-glow-it-engineer';
+            if (id === 'scientist') return 'agent-glow-scientist';
+            return 'agent-glow-custom';
+        }
+
         function renderPersonaPanel() {
+            const sidebarPersonas = document.getElementById('sidebarPersonas');
             const all = getAllPersonas();
-            let html = '<h3>Choose Persona</h3>';
+            let html = '';
 
             all.forEach(p => {
                 const isCustom = customPersonas.some(cp => cp.id === p.id);
                 const isSelected = p.id === activePersonaId;
+                const glowClass = getAgentGlowClass(p.id);
                 html += `
-                    <button class="persona-option${isSelected ? ' selected' : ''}" data-id="${p.id}">
-                        <span class="persona-name">${p.name}</span>
-                        <span class="persona-desc">${p.desc}</span>
-                        ${isCustom ? `<div class="persona-actions">
+                    <button class="agent-card ${glowClass}${isSelected ? ' selected' : ''}" data-id="${p.id}">
+                        <span class="agent-name">${p.name}</span>
+                        <span class="agent-desc">${p.desc}</span>
+                        ${isCustom ? `<div class="agent-actions">
                             <button data-action="edit" data-id="${p.id}">Edit</button>
                             <button data-action="delete" data-id="${p.id}">Delete</button>
                         </div>` : ''}
@@ -1488,28 +1640,24 @@
                 `;
             });
 
-            html += '<hr class="persona-divider">';
-            html += '<button class="add-persona-btn" id="btnAddPersona">+ Create Custom Persona</button>';
-
-            personaPanel.innerHTML = html;
+            sidebarPersonas.innerHTML = html;
 
             // Select persona clicks
-            personaPanel.querySelectorAll('.persona-option').forEach(btn => {
+            sidebarPersonas.querySelectorAll('.agent-card').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    if (e.target.closest('.persona-actions')) return;
+                    if (e.target.closest('.agent-actions')) return;
                     setPersona(btn.dataset.id);
-                    personaPanel.classList.remove('open');
                 });
             });
 
             // Edit/Delete
-            personaPanel.querySelectorAll('[data-action="edit"]').forEach(btn => {
+            sidebarPersonas.querySelectorAll('[data-action="edit"]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     openModal(btn.dataset.id);
                 });
             });
-            personaPanel.querySelectorAll('[data-action="delete"]').forEach(btn => {
+            sidebarPersonas.querySelectorAll('[data-action="delete"]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     if (confirm('Delete this custom persona?')) {
@@ -1521,8 +1669,8 @@
                 });
             });
 
-            // Add button
-            document.getElementById('btnAddPersona').addEventListener('click', () => openModal());
+            // Add button in sidebar footer
+            document.getElementById('btnAddPersonaSidebar').addEventListener('click', () => openModal());
         }
 
         function openModal(editId = null) {
@@ -1574,17 +1722,6 @@
         modalCancel.addEventListener('click', closeModal);
         personaModalOverlay.addEventListener('click', (e) => {
             if (e.target === personaModalOverlay) closeModal();
-        });
-
-        personaBadge.addEventListener('click', () => {
-            personaPanel.classList.toggle('open');
-            voicePanel.classList.remove('open');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!personaPanel.contains(e.target) && e.target !== personaBadge) {
-                personaPanel.classList.remove('open');
-            }
         });
 
         // Initialize system message with active persona
