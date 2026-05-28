@@ -608,7 +608,36 @@
             opacity: 1;
         }
 
-        /* Scrollbar styling */
+        /* ==================== TYPING ANIMATION ==================== */
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: var(--text-accent);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blinkCursor 0.8s infinite;
+            border-radius: 2px;
+        }
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .typing-cursor.done {
+            animation: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Staggered fade-in for rendered markdown blocks */
+        .message-content .reveal-item {
+            opacity: 0;
+            transform: translateY(8px);
+            animation: revealUp 0.4s ease forwards;
+        }
+        @keyframes revealUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
         .chat-messages::-webkit-scrollbar { width: 8px; }
         .chat-messages::-webkit-scrollbar-track { background: transparent; }
         .chat-messages::-webkit-scrollbar-thumb {
@@ -967,6 +996,13 @@
             });
             addCopyButtons(element);
             makeSpeakable(element, text);
+
+            // Apply staggered reveal animation to children
+            const children = Array.from(element.children);
+            children.forEach((child, i) => {
+                child.classList.add('reveal-item');
+                child.style.animationDelay = `${Math.min(i * 0.06, 0.5)}s`;
+            });
         }
 
         function appendMessage(role, text, isImage = false, imageSrc = '') {
@@ -1137,8 +1173,8 @@
                             if (data.done) break;
                             if (data.content) {
                                 fullResponse += data.content;
-                                // Show raw text while streaming for speed
-                                contentDiv.textContent = fullResponse;
+                                // Show raw text with blinking cursor while streaming
+                                contentDiv.innerHTML = escapeHtml(fullResponse) + '<span class="typing-cursor"></span>';
                                 chatMessages.scrollTop = chatMessages.scrollHeight;
                             }
                         } catch (e) {
