@@ -32,6 +32,11 @@
             --bg-typing: #f0f4ff;
 
             /* Fallback persona vars (Guruji light) */
+            --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-avatar-bot: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --bg-attachment: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+
             --text-accent: #764ba2;
             --border-input-focus: #667eea;
             --border-icon: #764ba2;
@@ -91,9 +96,13 @@
 
             --code-bg: #0d0d15;
             --code-text: #e0e0e0;
-            --bg-attachment: #2d2d44;
 
             /* Fallback persona vars (Guruji dark) */
+            --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-avatar-bot: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --bg-attachment: linear-gradient(135deg, #2d1b4e 0%, #1a1a3e 100%);
+
             --text-accent: #a5b4fc;
             --border-input-focus: #667eea;
             --border-icon: #a5b4fc;
@@ -937,9 +946,6 @@
             hljsThemeLink.href = theme === 'dark'
                 ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
                 : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
-
-            // Re-apply persona theme for light/dark switch
-            applyPersonaTheme(activePersonaId);
         }
 
         const savedTheme = localStorage.getItem('guruji-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -948,6 +954,7 @@
         themeToggle.addEventListener('click', () => {
             const current = html.getAttribute('data-theme');
             applyTheme(current === 'dark' ? 'light' : 'dark');
+            applyPersonaTheme(activePersonaId);
         });
 
         // ==================== PERSONA THEMES ====================
@@ -1271,6 +1278,14 @@
         const fileInput = document.getElementById('fileInput');
         const attachmentsBar = document.getElementById('attachmentsBar');
         const typingIndicator = document.getElementById('typingIndicator');
+        const personaBadge = document.getElementById('personaBadge');
+        const personaPanel = document.getElementById('personaPanel');
+        const personaModalOverlay = document.getElementById('personaModalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPersonaName = document.getElementById('modalPersonaName');
+        const modalPersonaPrompt = document.getElementById('modalPersonaPrompt');
+        const modalSave = document.getElementById('modalSave');
+        const modalCancel = document.getElementById('modalCancel');
 
         // ==================== PERSONA SYSTEM ====================
         const defaultPersonas = [
