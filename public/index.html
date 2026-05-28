@@ -27,11 +27,7 @@
             --bg-container: rgba(255, 255, 255, 0.95);
             --bg-messages: #f0f4ff;
             --bg-input: rgba(255, 255, 255, 0.9);
-            --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-bot: white;
-            --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --bg-avatar-bot: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --bg-attachment: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
             --bg-icon-btn: white;
             --bg-typing: #f0f4ff;
 
@@ -40,39 +36,22 @@
             --text-header: white;
             --text-user: white;
             --text-bot: #333;
-            --text-accent: #764ba2;
 
             --border-primary: #e0e0e0;
             --border-bot: #e0e0e0;
-            --border-input-focus: #667eea;
-            --border-icon: #764ba2;
-
-            --shadow-container: 0 20px 60px rgba(102, 126, 234, 0.3), 0 0 20px rgba(240, 147, 251, 0.2);
-            --shadow-btn: 0 5px 15px rgba(102, 126, 234, 0.5);
-
-            --scrollbar: linear-gradient(180deg, #667eea, #764ba2);
-            --scrollbar-hover: linear-gradient(180deg, #764ba2, #f093fb);
+            --table-border: #e0e0e0;
+            --table-alt: #f8f9ff;
 
             --code-bg: #1e1e2e;
             --code-text: #e0e0e0;
-            --inline-code-bg: rgba(102, 126, 234, 0.1);
-            --inline-code-text: #764ba2;
-            --blockquote-border: linear-gradient(180deg, #667eea, #f093fb);
-            --table-border: #e0e0e0;
-            --table-alt: #f8f9ff;
-            --link-color: #667eea;
+            --bg-attachment: #e8eaff;
         }
 
         [data-theme="dark"] {
-            --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
             --bg-container: rgba(30, 30, 46, 0.95);
             --bg-messages: #181825;
             --bg-input: rgba(30, 30, 46, 0.9);
-            --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-bot: #2d2d44;
-            --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --bg-avatar-bot: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            --bg-attachment: linear-gradient(135deg, #2d1b4e 0%, #1a1a3e 100%);
             --bg-icon-btn: #2d2d44;
             --bg-typing: #181825;
 
@@ -81,27 +60,15 @@
             --text-header: white;
             --text-user: white;
             --text-bot: #e0e0e0;
-            --text-accent: #a5b4fc;
 
             --border-primary: #3a3a55;
             --border-bot: #3a3a55;
-            --border-input-focus: #667eea;
-            --border-icon: #a5b4fc;
-
-            --shadow-container: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(102, 126, 234, 0.15);
-            --shadow-btn: 0 5px 20px rgba(102, 126, 234, 0.6);
-
-            --scrollbar: linear-gradient(180deg, #667eea, #764ba2);
-            --scrollbar-hover: linear-gradient(180deg, #764ba2, #f093fb);
+            --table-border: #3a3a55;
+            --table-alt: #252545;
 
             --code-bg: #0d0d15;
             --code-text: #e0e0e0;
-            --inline-code-bg: rgba(165, 180, 252, 0.1);
-            --inline-code-text: #a5b4fc;
-            --blockquote-border: linear-gradient(180deg, #667eea, #f093fb);
-            --table-border: #3a3a55;
-            --table-alt: #252545;
-            --link-color: #a5b4fc;
+            --bg-attachment: #2d2d44;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -130,14 +97,14 @@
         }
         .chat-header {
             position: relative;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: var(--header-bg);
             color: var(--text-header);
             padding: 20px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 15px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px var(--shadow-header);
         }
         .chat-header-title {
             flex: 1;
@@ -194,7 +161,7 @@
             height: 26px;
             border-radius: 50%;
             border: none;
-            background: rgba(118, 75, 162, 0.1);
+            background: var(--speaker-bg);
             color: var(--text-accent);
             font-size: 13px;
             cursor: pointer;
@@ -326,12 +293,12 @@
         .persona-option:hover {
             border-color: var(--border-input-focus);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(102,126,234,0.15);
+            box-shadow: 0 2px 8px var(--shadow-btn-soft);
         }
         .persona-option.selected {
             border-color: var(--border-input-focus);
-            background: linear-gradient(90deg, rgba(102,126,234,0.08), rgba(240,147,251,0.08));
-            box-shadow: 0 0 0 2px rgba(102,126,234,0.2);
+            background: linear-gradient(90deg, var(--option-sel-1), var(--option-sel-2));
+            box-shadow: 0 0 0 2px var(--shadow-btn-soft);
         }
         .persona-name {
             font-weight: 600;
@@ -459,10 +426,11 @@
         }
         .cancel-btn:hover { background: var(--border-primary); }
         .save-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--save-btn-bg);
             color: white;
         }
-        .save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
+        .save-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-btn); }
+
         .chat-messages {
             flex: 1;
             padding: 25px;
@@ -495,7 +463,7 @@
             background: var(--bg-user);
             color: var(--text-user);
             border-bottom-right-radius: 4px;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 3px 10px var(--shadow-btn-soft);
         }
         .message.bot .message-content {
             background: var(--bg-bot);
@@ -591,7 +559,7 @@
         }
         .chat-controls input[type="text"]:focus {
             border-color: var(--border-input-focus);
-            box-shadow: 0 0 12px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 12px var(--shadow-focus);
         }
         .chat-controls input[type="text"]::placeholder { color: var(--text-secondary); opacity: 0.8; }
         .icon-btn {
@@ -613,12 +581,12 @@
             background: var(--text-accent);
             color: var(--bg-container);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);
+            box-shadow: 0 4px 12px var(--shadow-btn-soft);
         }
         .icon-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .send-btn {
             padding: 14px 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: var(--send-btn-bg);
             background-size: 200% 200%;
             color: white;
             border: none;
@@ -651,7 +619,7 @@
             display: inline-block;
             width: 20px;
             height: 8px;
-            background: linear-gradient(90deg, #667eea, #f093fb);
+            background: var(--typing-bar-bg);
             border-radius: 4px;
             animation: typingBounce 1s infinite ease-in-out;
         }
@@ -729,7 +697,7 @@
             text-align: left;
         }
         .message.bot .message-content th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--table-header-bg);
             color: white;
             font-weight: 600;
         }
@@ -833,6 +801,8 @@
         @keyframes revealUp {
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Scrollbar styling */
         .chat-messages::-webkit-scrollbar { width: 8px; }
         .chat-messages::-webkit-scrollbar-track { background: transparent; }
         .chat-messages::-webkit-scrollbar-thumb {
@@ -921,6 +891,9 @@
             hljsThemeLink.href = theme === 'dark'
                 ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
                 : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+
+            // Re-apply persona theme for light/dark switch
+            applyPersonaTheme(activePersonaId);
         }
 
         const savedTheme = localStorage.getItem('guruji-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -930,6 +903,485 @@
             const current = html.getAttribute('data-theme');
             applyTheme(current === 'dark' ? 'light' : 'dark');
         });
+
+        // ==================== PERSONA THEMES ====================
+        const personaThemes = {
+            guruji: {
+                light: {
+                    '--bg-body': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+                    '--text-accent': '#764ba2', '--border-input-focus': '#667eea', '--border-icon': '#764ba2',
+                    '--shadow-container': '0 20px 60px rgba(102,126,234,0.3), 0 0 20px rgba(240,147,251,0.2)',
+                    '--shadow-btn': '0 5px 15px rgba(102,126,234,0.5)',
+                    '--shadow-btn-soft': 'rgba(102,126,234,0.15)',
+                    '--shadow-focus': 'rgba(102,126,234,0.2)',
+                    '--shadow-header': 'rgba(102,126,234,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #667eea, #764ba2)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #764ba2, #f093fb)',
+                    '--inline-code-bg': 'rgba(102,126,234,0.1)', '--inline-code-text': '#764ba2',
+                    '--blockquote-border': 'linear-gradient(180deg, #667eea, #f093fb)',
+                    '--link-color': '#667eea',
+                    '--save-btn-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #667eea, #f093fb)',
+                    '--table-header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                    '--speaker-bg': 'rgba(118,75,162,0.1)',
+                    '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)'
+                },
+                dark: {
+                    '--bg-body': 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #2d1b4e 0%, #1a1a3e 100%)',
+                    '--text-accent': '#a5b4fc', '--border-input-focus': '#667eea', '--border-icon': '#a5b4fc',
+                    '--shadow-container': '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(102,126,234,0.15)',
+                    '--shadow-btn': '0 5px 20px rgba(102,126,234,0.6)',
+                    '--shadow-btn-soft': 'rgba(102,126,234,0.15)',
+                    '--shadow-focus': 'rgba(102,126,234,0.2)',
+                    '--shadow-header': 'rgba(102,126,234,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #667eea, #764ba2)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #764ba2, #f093fb)',
+                    '--inline-code-bg': 'rgba(165,180,252,0.1)', '--inline-code-text': '#a5b4fc',
+                    '--blockquote-border': 'linear-gradient(180deg, #667eea, #f093fb)',
+                    '--link-color': '#a5b4fc',
+                    '--save-btn-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #667eea, #f093fb)',
+                    '--table-header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                    '--speaker-bg': 'rgba(165,180,252,0.1)',
+                    '--option-sel-1': 'rgba(102,126,234,0.08)', '--option-sel-2': 'rgba(240,147,251,0.08)'
+                }
+            },
+            coder: {
+                light: {
+                    '--bg-body': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #0984e3 0%, #74b9ff 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%)',
+                    '--text-accent': '#1a5c3a', '--border-input-focus': '#11998e', '--border-icon': '#1a5c3a',
+                    '--shadow-container': '0 20px 60px rgba(17,153,142,0.3), 0 0 20px rgba(56,239,125,0.2)',
+                    '--shadow-btn': '0 5px 15px rgba(17,153,142,0.5)',
+                    '--shadow-btn-soft': 'rgba(17,153,142,0.15)',
+                    '--shadow-focus': 'rgba(17,153,142,0.2)',
+                    '--shadow-header': 'rgba(17,153,142,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #11998e, #38ef7d)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #38ef7d, #0f3443)',
+                    '--inline-code-bg': 'rgba(17,153,142,0.1)', '--inline-code-text': '#1a5c3a',
+                    '--blockquote-border': 'linear-gradient(180deg, #11998e, #38ef7d)',
+                    '--link-color': '#11998e',
+                    '--save-btn-bg': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #11998e, #38ef7d)',
+                    '--table-header-bg': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
+                    '--speaker-bg': 'rgba(26,92,58,0.1)',
+                    '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)'
+                },
+                dark: {
+                    '--bg-body': 'linear-gradient(135deg, #0a0f0d 0%, #0d1f17 50%, #0d2b1d 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #0d2b1d 0%, #1a3c2d 100%)',
+                    '--text-accent': '#55efc4', '--border-input-focus': '#11998e', '--border-icon': '#55efc4',
+                    '--shadow-container': '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(17,153,142,0.15)',
+                    '--shadow-btn': '0 5px 20px rgba(17,153,142,0.6)',
+                    '--shadow-btn-soft': 'rgba(17,153,142,0.15)',
+                    '--shadow-focus': 'rgba(17,153,142,0.2)',
+                    '--shadow-header': 'rgba(17,153,142,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #11998e, #38ef7d)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #38ef7d, #0f3443)',
+                    '--inline-code-bg': 'rgba(85,239,196,0.1)', '--inline-code-text': '#55efc4',
+                    '--blockquote-border': 'linear-gradient(180deg, #11998e, #38ef7d)',
+                    '--link-color': '#55efc4',
+                    '--save-btn-bg': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #11998e, #38ef7d)',
+                    '--table-header-bg': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #0d2b1d 0%, #1a5c3a 50%, #2ecc71 100%)',
+                    '--speaker-bg': 'rgba(85,239,196,0.1)',
+                    '--option-sel-1': 'rgba(17,153,142,0.08)', '--option-sel-2': 'rgba(56,239,125,0.08)'
+                }
+            },
+            teacher: {
+                light: {
+                    '--bg-body': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #ff7675 0%, #fd79a8 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #0984e3 0%, #74b9ff 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%)',
+                    '--text-accent': '#d35400', '--border-input-focus': '#f39c12', '--border-icon': '#d35400',
+                    '--shadow-container': '0 20px 60px rgba(243,156,18,0.3), 0 0 20px rgba(241,196,15,0.2)',
+                    '--shadow-btn': '0 5px 15px rgba(243,156,18,0.5)',
+                    '--shadow-btn-soft': 'rgba(243,156,18,0.15)',
+                    '--shadow-focus': 'rgba(243,156,18,0.2)',
+                    '--shadow-header': 'rgba(243,156,18,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #f39c12, #e67e22)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #e67e22, #f1c40f)',
+                    '--inline-code-bg': 'rgba(243,156,18,0.1)', '--inline-code-text': '#d35400',
+                    '--blockquote-border': 'linear-gradient(180deg, #f39c12, #f1c40f)',
+                    '--link-color': '#f39c12',
+                    '--save-btn-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #f39c12, #f1c40f)',
+                    '--table-header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
+                    '--speaker-bg': 'rgba(211,84,0,0.1)',
+                    '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)'
+                },
+                dark: {
+                    '--bg-body': 'linear-gradient(135deg, #1a120b 0%, #2d2016 50%, #3d2b1f 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #ff7675 0%, #fd79a8 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #3d2b1f 0%, #4d3b2f 100%)',
+                    '--text-accent': '#f1c40f', '--border-input-focus': '#f39c12', '--border-icon': '#f1c40f',
+                    '--shadow-container': '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(243,156,18,0.15)',
+                    '--shadow-btn': '0 5px 20px rgba(243,156,18,0.6)',
+                    '--shadow-btn-soft': 'rgba(243,156,18,0.15)',
+                    '--shadow-focus': 'rgba(243,156,18,0.2)',
+                    '--shadow-header': 'rgba(243,156,18,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #f39c12, #e67e22)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #e67e22, #f1c40f)',
+                    '--inline-code-bg': 'rgba(241,196,15,0.1)', '--inline-code-text': '#f1c40f',
+                    '--blockquote-border': 'linear-gradient(180deg, #f39c12, #f1c40f)',
+                    '--link-color': '#f1c40f',
+                    '--save-btn-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #f39c12, #f1c40f)',
+                    '--table-header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f1c40f 100%)',
+                    '--speaker-bg': 'rgba(241,196,15,0.1)',
+                    '--option-sel-1': 'rgba(243,156,18,0.08)', '--option-sel-2': 'rgba(241,196,15,0.08)'
+                }
+            },
+            creative: {
+                light: {
+                    '--bg-body': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #ff00cc 0%, #ff6b6b 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #d4a5ff 0%, #b8c6ff 100%)',
+                    '--text-accent': '#4a00e0', '--border-input-focus': '#8e2de2', '--border-icon': '#4a00e0',
+                    '--shadow-container': '0 20px 60px rgba(142,45,226,0.3), 0 0 20px rgba(255,0,204,0.2)',
+                    '--shadow-btn': '0 5px 15px rgba(142,45,226,0.5)',
+                    '--shadow-btn-soft': 'rgba(142,45,226,0.15)',
+                    '--shadow-focus': 'rgba(142,45,226,0.2)',
+                    '--shadow-header': 'rgba(142,45,226,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #8e2de2, #4a00e0)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #4a00e0, #ff00cc)',
+                    '--inline-code-bg': 'rgba(142,45,226,0.1)', '--inline-code-text': '#4a00e0',
+                    '--blockquote-border': 'linear-gradient(180deg, #8e2de2, #ff00cc)',
+                    '--link-color': '#8e2de2',
+                    '--save-btn-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #8e2de2, #ff00cc)',
+                    '--table-header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
+                    '--speaker-bg': 'rgba(74,0,224,0.1)',
+                    '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)'
+                },
+                dark: {
+                    '--bg-body': 'linear-gradient(135deg, #0f0518 0%, #1a0b2e 50%, #2d1045 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #ff00cc 0%, #ff6b6b 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #2d1045 0%, #3a1a5e 100%)',
+                    '--text-accent': '#d4a5ff', '--border-input-focus': '#8e2de2', '--border-icon': '#d4a5ff',
+                    '--shadow-container': '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(142,45,226,0.15)',
+                    '--shadow-btn': '0 5px 20px rgba(142,45,226,0.6)',
+                    '--shadow-btn-soft': 'rgba(142,45,226,0.15)',
+                    '--shadow-focus': 'rgba(142,45,226,0.2)',
+                    '--shadow-header': 'rgba(142,45,226,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #8e2de2, #4a00e0)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #4a00e0, #ff00cc)',
+                    '--inline-code-bg': 'rgba(212,165,255,0.1)', '--inline-code-text': '#d4a5ff',
+                    '--blockquote-border': 'linear-gradient(180deg, #8e2de2, #ff00cc)',
+                    '--link-color': '#d4a5ff',
+                    '--save-btn-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #8e2de2, #ff00cc)',
+                    '--table-header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 50%, #ff00cc 100%)',
+                    '--speaker-bg': 'rgba(212,165,255,0.1)',
+                    '--option-sel-1': 'rgba(142,45,226,0.08)', '--option-sel-2': 'rgba(255,0,204,0.08)'
+                }
+            },
+            'it-engineer': {
+                light: {
+                    '--bg-body': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #e74c3c 0%, #e67e22 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #00cec9 0%, #81ecec 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #a9dfbf 0%, #aed6f1 100%)',
+                    '--text-accent': '#2980b9', '--border-input-focus': '#3498db', '--border-icon': '#2980b9',
+                    '--shadow-container': '0 20px 60px rgba(52,152,219,0.3), 0 0 20px rgba(0,206,201,0.2)',
+                    '--shadow-btn': '0 5px 15px rgba(52,152,219,0.5)',
+                    '--shadow-btn-soft': 'rgba(52,152,219,0.15)',
+                    '--shadow-focus': 'rgba(52,152,219,0.2)',
+                    '--shadow-header': 'rgba(52,152,219,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #2c3e50, #3498db)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #3498db, #00cec9)',
+                    '--inline-code-bg': 'rgba(52,152,219,0.1)', '--inline-code-text': '#2980b9',
+                    '--blockquote-border': 'linear-gradient(180deg, #2c3e50, #00cec9)',
+                    '--link-color': '#3498db',
+                    '--save-btn-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #2c3e50, #00cec9)',
+                    '--table-header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
+                    '--speaker-bg': 'rgba(41,128,185,0.1)',
+                    '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)'
+                },
+                dark: {
+                    '--bg-body': 'linear-gradient(135deg, #0a0f13 0%, #111b24 50%, #16202b 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #e74c3c 0%, #e67e22 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #81ecec 0%, #00cec9 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #16202b 0%, #1f2e3d 100%)',
+                    '--text-accent': '#81ecec', '--border-input-focus': '#3498db', '--border-icon': '#81ecec',
+                    '--shadow-container': '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(52,152,219,0.15)',
+                    '--shadow-btn': '0 5px 20px rgba(52,152,219,0.6)',
+                    '--shadow-btn-soft': 'rgba(52,152,219,0.15)',
+                    '--shadow-focus': 'rgba(52,152,219,0.2)',
+                    '--shadow-header': 'rgba(52,152,219,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #2c3e50, #3498db)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #3498db, #00cec9)',
+                    '--inline-code-bg': 'rgba(129,236,236,0.1)', '--inline-code-text': '#81ecec',
+                    '--blockquote-border': 'linear-gradient(180deg, #2c3e50, #00cec9)',
+                    '--link-color': '#81ecec',
+                    '--save-btn-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #2c3e50, #00cec9)',
+                    '--table-header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #00cec9 100%)',
+                    '--speaker-bg': 'rgba(129,236,236,0.1)',
+                    '--option-sel-1': 'rgba(52,152,219,0.08)', '--option-sel-2': 'rgba(0,206,201,0.08)'
+                }
+            },
+            scientist: {
+                light: {
+                    '--bg-body': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #e65100 0%, #f57c00 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #00838f 0%, #4dd0e1 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #b2ebf2 0%, #b3e5fc 100%)',
+                    '--text-accent': '#283593', '--border-input-focus': '#1a237e', '--border-icon': '#283593',
+                    '--shadow-container': '0 20px 60px rgba(26,35,126,0.3), 0 0 20px rgba(0,131,143,0.2)',
+                    '--shadow-btn': '0 5px 15px rgba(26,35,126,0.5)',
+                    '--shadow-btn-soft': 'rgba(26,35,126,0.15)',
+                    '--shadow-focus': 'rgba(26,35,126,0.2)',
+                    '--shadow-header': 'rgba(26,35,126,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #1a237e, #283593)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #283593, #00838f)',
+                    '--inline-code-bg': 'rgba(26,35,126,0.1)', '--inline-code-text': '#283593',
+                    '--blockquote-border': 'linear-gradient(180deg, #1a237e, #00838f)',
+                    '--link-color': '#1a237e',
+                    '--save-btn-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #1a237e, #00838f)',
+                    '--table-header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
+                    '--speaker-bg': 'rgba(40,53,147,0.1)',
+                    '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)'
+                },
+                dark: {
+                    '--bg-body': 'linear-gradient(135deg, #050a14 0%, #0a1224 50%, #0d1b2a 100%)',
+                    '--bg-user': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
+                    '--bg-avatar-user': 'linear-gradient(135deg, #e65100 0%, #f57c00 100%)',
+                    '--bg-avatar-bot': 'linear-gradient(135deg, #4dd0e1 0%, #00838f 100%)',
+                    '--bg-attachment': 'linear-gradient(135deg, #0d1b2a 0%, #152238 100%)',
+                    '--text-accent': '#90caf9', '--border-input-focus': '#1a237e', '--border-icon': '#90caf9',
+                    '--shadow-container': '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(26,35,126,0.15)',
+                    '--shadow-btn': '0 5px 20px rgba(26,35,126,0.6)',
+                    '--shadow-btn-soft': 'rgba(26,35,126,0.15)',
+                    '--shadow-focus': 'rgba(26,35,126,0.2)',
+                    '--shadow-header': 'rgba(26,35,126,0.3)',
+                    '--scrollbar': 'linear-gradient(180deg, #1a237e, #283593)',
+                    '--scrollbar-hover': 'linear-gradient(180deg, #283593, #00838f)',
+                    '--inline-code-bg': 'rgba(144,202,249,0.1)', '--inline-code-text': '#90caf9',
+                    '--blockquote-border': 'linear-gradient(180deg, #1a237e, #00838f)',
+                    '--link-color': '#90caf9',
+                    '--save-btn-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
+                    '--typing-bar-bg': 'linear-gradient(90deg, #1a237e, #00838f)',
+                    '--table-header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
+                    '--header-bg': 'linear-gradient(135deg, #1a237e 0%, #283593 50%, #00838f 100%)',
+                    '--speaker-bg': 'rgba(144,202,249,0.1)',
+                    '--option-sel-1': 'rgba(26,35,126,0.08)', '--option-sel-2': 'rgba(0,131,143,0.08)'
+                }
+            }
+        };
+
+        function applyPersonaTheme(personaId) {
+            const theme = html.getAttribute('data-theme') || 'light';
+            const map = personaThemes[personaId];
+            const vars = map ? map[theme] : personaThemes['guruji'][theme];
+            Object.entries(vars).forEach(([k, v]) => {
+                html.style.setProperty(k, v);
+            });
+        }
+
+        // Chat logic
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const attachBtn = document.getElementById('attachBtn');
+        const fileInput = document.getElementById('fileInput');
+        const attachmentsBar = document.getElementById('attachmentsBar');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        // ==================== PERSONA SYSTEM ====================
+        const defaultPersonas = [
+            { id: 'guruji', name: 'Guruji', desc: 'Wise, warm, and helpful AI assistant.', prompt: 'You are Guruji, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom. Use markdown formatting when helpful for readability.' },
+            { id: 'coder', name: 'Coder', desc: 'Technical, concise, and code-focused.', prompt: 'You are an expert Programmer and Software Engineer. Respond with clean, efficient, well-documented code. Be concise and direct. Use code blocks for all code. Explain algorithms briefly and practically. Keep responses focused on technical correctness.' },
+            { id: 'teacher', name: 'Teacher', desc: 'Patient, engaging, and educational.', prompt: 'You are a patient and engaging Teacher who loves explaining concepts step by step. Break down complex topics into simple pieces. Use examples and analogies. Ask guided questions to help the learner think. Be encouraging and supportive.' },
+            { id: 'creative', name: 'Creative', desc: 'Poetic, imaginative, and artistic.', prompt: 'You are a creative writer, poet, and storyteller. Respond with vivid imagery, metaphors, and creative flair. Think outside the box. Use evocative language and artistic expression. Make ordinary topics feel magical and inspiring.' },
+            { id: 'it-engineer', name: 'IT Engineer', desc: 'System admin, cloud & datacenter guru.', prompt: 'You are a seasoned IT Systems Engineer, Cloud Architect, and Datacenter Expert with deep knowledge of Hyper-V, VMware, Azure, AWS, Office 365, Active Directory, networking (Cisco, routing, switching, VLANs, firewalls, VPN), storage (SAN/NAS), ITIL, PowerShell, and infrastructure automation. Provide practical, production-ready guidance. Think like a senior engineer troubleshooting real issues. Include commands, configs, and best practices.' },
+            { id: 'scientist', name: 'Scientist', desc: 'Rigorous, analytical, and evidence-based.', prompt: 'You are a rigorous Scientist and Researcher. Base your answers on evidence and logical reasoning. Cite concepts and theories where relevant. Acknowledge uncertainty when it exists. Be precise with terminology. Structure arguments clearly with hypotheses, evidence, and conclusions.' }
+        ];
+        let customPersonas = JSON.parse(localStorage.getItem('guruji-custom-personas') || '[]');
+        let activePersonaId = localStorage.getItem('guruji-active-persona') || 'guruji';
+        let editingCustomId = null;
+
+        function getAllPersonas() {
+            return [...defaultPersonas, ...customPersonas];
+        }
+
+        function getActivePersona() {
+            return getAllPersonas().find(p => p.id === activePersonaId) || defaultPersonas[0];
+        }
+
+        function setPersona(id) {
+            activePersonaId = id;
+            localStorage.setItem('guruji-active-persona', id);
+            const persona = getActivePersona();
+            personaBadge.textContent = persona.name;
+            messages = [{ role: 'system', content: persona.prompt }];
+            renderPersonaPanel();
+            applyPersonaTheme(id);
+        }
+
+        function renderPersonaPanel() {
+            const all = getAllPersonas();
+            let html = '<h3>Choose Persona</h3>';
+
+            all.forEach(p => {
+                const isCustom = customPersonas.some(cp => cp.id === p.id);
+                const isSelected = p.id === activePersonaId;
+                html += `
+                    <button class="persona-option${isSelected ? ' selected' : ''}" data-id="${p.id}">
+                        <span class="persona-name">${p.name}</span>
+                        <span class="persona-desc">${p.desc}</span>
+                        ${isCustom ? `<div class="persona-actions">
+                            <button data-action="edit" data-id="${p.id}">Edit</button>
+                            <button data-action="delete" data-id="${p.id}">Delete</button>
+                        </div>` : ''}
+                    </button>
+                `;
+            });
+
+            html += '<hr class="persona-divider">';
+            html += '<button class="add-persona-btn" id="btnAddPersona">+ Create Custom Persona</button>';
+
+            personaPanel.innerHTML = html;
+
+            // Select persona clicks
+            personaPanel.querySelectorAll('.persona-option').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if (e.target.closest('.persona-actions')) return;
+                    setPersona(btn.dataset.id);
+                    personaPanel.classList.remove('open');
+                });
+            });
+
+            // Edit/Delete
+            personaPanel.querySelectorAll('[data-action="edit"]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(btn.dataset.id);
+                });
+            });
+            personaPanel.querySelectorAll('[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm('Delete this custom persona?')) {
+                        customPersonas = customPersonas.filter(cp => cp.id !== btn.dataset.id);
+                        localStorage.setItem('guruji-custom-personas', JSON.stringify(customPersonas));
+                        if (activePersonaId === btn.dataset.id) setPersona('guruji');
+                        else renderPersonaPanel();
+                    }
+                });
+            });
+
+            // Add button
+            document.getElementById('btnAddPersona').addEventListener('click', () => openModal());
+        }
+
+        function openModal(editId = null) {
+            editingCustomId = editId;
+            if (editId) {
+                const p = customPersonas.find(cp => cp.id === editId);
+                modalTitle.textContent = 'Edit Persona';
+                modalPersonaName.value = p.name;
+                modalPersonaPrompt.value = p.prompt;
+            } else {
+                modalTitle.textContent = 'Create Custom Persona';
+                modalPersonaName.value = '';
+                modalPersonaPrompt.value = '';
+            }
+            personaModalOverlay.classList.add('open');
+            modalPersonaName.focus();
+        }
+
+        function closeModal() {
+            personaModalOverlay.classList.remove('open');
+            editingCustomId = null;
+        }
+
+        modalSave.addEventListener('click', () => {
+            const name = modalPersonaName.value.trim();
+            const prompt = modalPersonaPrompt.value.trim();
+            if (!name || !prompt) {
+                alert('Please fill in both name and prompt.');
+                return;
+            }
+            if (editingCustomId) {
+                const p = customPersonas.find(cp => cp.id === editingCustomId);
+                p.name = name;
+                p.desc = prompt.substring(0, 80) + (prompt.length > 80 ? '...' : '');
+                p.prompt = prompt;
+            } else {
+                customPersonas.push({
+                    id: 'custom-' + Date.now(),
+                    name,
+                    desc: prompt.substring(0, 80) + (prompt.length > 80 ? '...' : ''),
+                    prompt
+                });
+            }
+            localStorage.setItem('guruji-custom-personas', JSON.stringify(customPersonas));
+            renderPersonaPanel();
+            closeModal();
+        });
+
+        modalCancel.addEventListener('click', closeModal);
+        personaModalOverlay.addEventListener('click', (e) => {
+            if (e.target === personaModalOverlay) closeModal();
+        });
+
+        personaBadge.addEventListener('click', () => {
+            personaPanel.classList.toggle('open');
+            voicePanel.classList.remove('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!personaPanel.contains(e.target) && e.target !== personaBadge) {
+                personaPanel.classList.remove('open');
+            }
+        });
+
+        // Initialize system message with active persona
+        let messages = [
+            { role: 'system', content: getActivePersona().prompt }
+        ];
+        personaBadge.textContent = getActivePersona().name;
+        renderPersonaPanel();
+        applyPersonaTheme(activePersonaId);
 
         // ==================== TEXT-TO-SPEECH ====================
         const ttsToggle = document.getElementById('ttsToggle');
@@ -1134,187 +1586,6 @@
             };
             element.parentElement.insertBefore(btn, element);
         }
-
-        // Chat logic
-        const chatMessages = document.getElementById('chatMessages');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const attachBtn = document.getElementById('attachBtn');
-        const fileInput = document.getElementById('fileInput');
-        const attachmentsBar = document.getElementById('attachmentsBar');
-        const typingIndicator = document.getElementById('typingIndicator');
-
-        const personaBadge = document.getElementById('personaBadge');
-        const personaPanel = document.getElementById('personaPanel');
-        const personaModalOverlay = document.getElementById('personaModalOverlay');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalPersonaName = document.getElementById('modalPersonaName');
-        const modalPersonaPrompt = document.getElementById('modalPersonaPrompt');
-        const modalSave = document.getElementById('modalSave');
-        const modalCancel = document.getElementById('modalCancel');
-
-        // ==================== PERSONA SYSTEM ====================
-        const defaultPersonas = [
-            { id: 'guruji', name: 'Guruji', desc: 'Wise, warm, and helpful AI assistant.', prompt: 'You are Guruji, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom. Use markdown formatting when helpful for readability.' },
-            { id: 'coder', name: 'Coder', desc: 'Technical, concise, and code-focused.', prompt: 'You are an expert Programmer and Software Engineer. Respond with clean, efficient, well-documented code. Be concise and direct. Use code blocks for all code. Explain algorithms briefly and practically. Keep responses focused on technical correctness.' },
-            { id: 'teacher', name: 'Teacher', desc: 'Patient, engaging, and educational.', prompt: 'You are a patient and engaging Teacher who loves explaining concepts step by step. Break down complex topics into simple pieces. Use examples and analogies. Ask guided questions to help the learner think. Be encouraging and supportive.' },
-            { id: 'creative', name: 'Creative', desc: 'Poetic, imaginative, and artistic.', prompt: 'You are a creative writer, poet, and storyteller. Respond with vivid imagery, metaphors, and creative flair. Think outside the box. Use evocative language and artistic expression. Make ordinary topics feel magical and inspiring.' },
-            { id: 'it-engineer', name: 'IT Engineer', desc: 'System admin, cloud & datacenter guru.', prompt: 'You are a seasoned IT Systems Engineer, Cloud Architect, and Datacenter Expert with deep knowledge of Hyper-V, VMware, Azure, AWS, Office 365, Active Directory, networking (Cisco, routing, switching, VLANs, firewalls, VPN), storage (SAN/NAS), ITIL, PowerShell, and infrastructure automation. Provide practical, production-ready guidance. Think like a senior engineer troubleshooting real issues. Include commands, configs, and best practices.' },
-            { id: 'scientist', name: 'Scientist', desc: 'Rigorous, analytical, and evidence-based.', prompt: 'You are a rigorous Scientist and Researcher. Base your answers on evidence and logical reasoning. Cite concepts and theories where relevant. Acknowledge uncertainty when it exists. Be precise with terminology. Structure arguments clearly with hypotheses, evidence, and conclusions.' }
-        ];
-        let customPersonas = JSON.parse(localStorage.getItem('guruji-custom-personas') || '[]');
-        let activePersonaId = localStorage.getItem('guruji-active-persona') || 'guruji';
-        let editingCustomId = null;
-
-        function getAllPersonas() {
-            return [...defaultPersonas, ...customPersonas];
-        }
-
-        function getActivePersona() {
-            return getAllPersonas().find(p => p.id === activePersonaId) || defaultPersonas[0];
-        }
-
-        function setPersona(id) {
-            activePersonaId = id;
-            localStorage.setItem('guruji-active-persona', id);
-            const persona = getActivePersona();
-            personaBadge.textContent = persona.name;
-            messages = [{ role: 'system', content: persona.prompt }];
-            renderPersonaPanel();
-        }
-
-        function renderPersonaPanel() {
-            const all = getAllPersonas();
-            let html = '<h3>Choose Persona</h3>';
-
-            all.forEach(p => {
-                const isCustom = customPersonas.some(cp => cp.id === p.id);
-                const isSelected = p.id === activePersonaId;
-                html += `
-                    <button class="persona-option${isSelected ? ' selected' : ''}" data-id="${p.id}">
-                        <span class="persona-name">${p.name}</span>
-                        <span class="persona-desc">${p.desc}</span>
-                        ${isCustom ? `<div class="persona-actions">
-                            <button data-action="edit" data-id="${p.id}">Edit</button>
-                            <button data-action="delete" data-id="${p.id}">Delete</button>
-                        </div>` : ''}
-                    </button>
-                `;
-            });
-
-            html += '<hr class="persona-divider">';
-            html += '<button class="add-persona-btn" id="btnAddPersona">+ Create Custom Persona</button>';
-
-            personaPanel.innerHTML = html;
-
-            // Select persona clicks
-            personaPanel.querySelectorAll('.persona-option').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    if (e.target.closest('.persona-actions')) return;
-                    setPersona(btn.dataset.id);
-                    personaPanel.classList.remove('open');
-                });
-            });
-
-            // Edit/Delete
-            personaPanel.querySelectorAll('[data-action="edit"]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openModal(btn.dataset.id);
-                });
-            });
-            personaPanel.querySelectorAll('[data-action="delete"]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (confirm('Delete this custom persona?')) {
-                        customPersonas = customPersonas.filter(cp => cp.id !== btn.dataset.id);
-                        localStorage.setItem('guruji-custom-personas', JSON.stringify(customPersonas));
-                        if (activePersonaId === btn.dataset.id) setPersona('guruji');
-                        else renderPersonaPanel();
-                    }
-                });
-            });
-
-            // Add button
-            document.getElementById('btnAddPersona').addEventListener('click', () => openModal());
-        }
-
-        function openModal(editId = null) {
-            editingCustomId = editId;
-            if (editId) {
-                const p = customPersonas.find(cp => cp.id === editId);
-                modalTitle.textContent = 'Edit Persona';
-                modalPersonaName.value = p.name;
-                modalPersonaPrompt.value = p.prompt;
-            } else {
-                modalTitle.textContent = 'Create Custom Persona';
-                modalPersonaName.value = '';
-                modalPersonaPrompt.value = '';
-            }
-            personaModalOverlay.classList.add('open');
-            modalPersonaName.focus();
-        }
-
-        function closeModal() {
-            personaModalOverlay.classList.remove('open');
-            editingCustomId = null;
-        }
-
-        modalSave.addEventListener('click', () => {
-            const name = modalPersonaName.value.trim();
-            const prompt = modalPersonaPrompt.value.trim();
-            if (!name || !prompt) {
-                alert('Please fill in both name and prompt.');
-                return;
-            }
-            if (editingCustomId) {
-                const p = customPersonas.find(cp => cp.id === editingCustomId);
-                p.name = name;
-                p.desc = prompt.substring(0, 80) + (prompt.length > 80 ? '...' : '');
-                p.prompt = prompt;
-            } else {
-                customPersonas.push({
-                    id: 'custom-' + Date.now(),
-                    name,
-                    desc: prompt.substring(0, 80) + (prompt.length > 80 ? '...' : ''),
-                    prompt
-                });
-            }
-            localStorage.setItem('guruji-custom-personas', JSON.stringify(customPersonas));
-            renderPersonaPanel();
-            closeModal();
-        });
-
-        modalCancel.addEventListener('click', closeModal);
-        personaModalOverlay.addEventListener('click', (e) => {
-            if (e.target === personaModalOverlay) closeModal();
-        });
-
-        personaBadge.addEventListener('click', () => {
-            personaPanel.classList.toggle('open');
-            voicePanel.classList.remove('open');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!personaPanel.contains(e.target) && e.target !== personaBadge) {
-                personaPanel.classList.remove('open');
-            }
-        });
-
-        // Initialize system message with active persona
-        let messages = [
-            { role: 'system', content: getActivePersona().prompt }
-        ];
-        personaBadge.textContent = getActivePersona().name;
-        renderPersonaPanel();
-
-        let pendingFile = null;
-
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        fileInput.addEventListener('change', handleFileSelect);
 
         // Configure marked.js to NOT allow raw HTML (security)
         marked.setOptions({
