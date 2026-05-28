@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guruji - AI Assistant</title>
+    <title>Thinky - AI Assistant</title>
 
     <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -31,7 +31,7 @@
             --bg-icon-btn: white;
             --bg-typing: #f0f4ff;
 
-            /* Fallback persona vars (Guruji light) */
+            /* Fallback persona vars (Thinky light) */
             --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --bg-avatar-bot: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -97,7 +97,7 @@
             --code-bg: #0d0d15;
             --code-text: #e0e0e0;
 
-            /* Fallback persona vars (Guruji dark) */
+            /* Fallback persona vars (Thinky dark) */
             --bg-user: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-avatar-user: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --bg-avatar-bot: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
@@ -881,9 +881,9 @@
     <div class="chat-container">
         <div class="chat-header">
             <div class="chat-header-title">
-                <h1>Guruji</h1>
+                <h1>Thinky</h1>
                 <p>Powered by Kimi-K2.6 via Azure AI Foundry</p>
-                <span class="persona-badge" id="personaBadge">Guruji</span>
+                <span class="persona-badge" id="personaBadge">Thinky</span>
             </div>
             <div class="header-controls">
                 <button class="tts-toggle" id="ttsToggle" title="Toggle auto-speak">&#128264;</button>
@@ -913,18 +913,18 @@
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
                 <div class="avatar">G</div>
-                <div class="message-content" data-raw-text="Namaste! I am Guruji, your wise AI assistant. How may I assist you today?">Namaste! I am Guruji, your wise AI assistant. How may I assist you today?</div>
+                <div class="message-content" data-raw-text="Namaste! I am Thinky, your wise AI assistant. How may I assist you today?">Namaste! I am Thinky, your wise AI assistant. How may I assist you today?</div>
             </div>
         </div>
 
-        <div class="typing-indicator" id="typingIndicator">Guruji is thinking...</div>
+        <div class="typing-indicator" id="typingIndicator">Thinky is thinking...</div>
 
         <div class="chat-input-area">
             <div class="attachments-bar" id="attachmentsBar"></div>
             <div class="chat-controls">
                 <input type="file" id="fileInput" style="display:none" accept=".txt,.js,.py,.json,.md,.csv,.html,.css,.xml,.yaml,.yml,.log,.sql,.java,.cpp,.c,.h,.ts,.jsx,.tsx,.sh,.bat,.ps1,image/*">
                 <button class="icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach file">&#128206;</button>
-                <input type="text" id="userInput" placeholder="Ask Guruji anything..." autocomplete="off">
+                <input type="text" id="userInput" placeholder="Ask Thinky anything..." autocomplete="off">
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </div>
@@ -1298,7 +1298,7 @@
 
         // ==================== PERSONA SYSTEM ====================
         const defaultPersonas = [
-            { id: 'guruji', name: 'Guruji', desc: 'Wise, warm, and helpful AI assistant.', prompt: 'You are Guruji, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom. Use markdown formatting when helpful for readability.' },
+            { id: 'guruji', name: 'Thinky', desc: 'Wise, warm, and helpful AI assistant.', prompt: 'You are Thinky, a wise, warm, and helpful AI assistant. Respond with clarity, kindness, and wisdom. Use markdown formatting when helpful for readability.' },
             { id: 'coder', name: 'Coder', desc: 'Technical, concise, and code-focused.', prompt: 'You are an expert Programmer and Software Engineer. Respond with clean, efficient, well-documented code. Be concise and direct. Use code blocks for all code. Explain algorithms briefly and practically. Keep responses focused on technical correctness.' },
             { id: 'teacher', name: 'Teacher', desc: 'Patient, engaging, and educational.', prompt: 'You are a patient and engaging Teacher who loves explaining concepts step by step. Break down complex topics into simple pieces. Use examples and analogies. Ask guided questions to help the learner think. Be encouraging and supportive.' },
             { id: 'creative', name: 'Creative', desc: 'Poetic, imaginative, and artistic.', prompt: 'You are a creative writer, poet, and storyteller. Respond with vivid imagery, metaphors, and creative flair. Think outside the box. Use evocative language and artistic expression. Make ordinary topics feel magical and inspiring.' },
@@ -1522,7 +1522,7 @@
                     // Preview
                     const voice = allVoices.find(v => v.name === selectedVoiceName);
                     if (voice) {
-                        const u = new SpeechSynthesisUtterance('Hello, I am Guruji.');
+                        const u = new SpeechSynthesisUtterance('Hello, I am Thinky.');
                         u.voice = voice;
                         window.speechSynthesis.speak(u);
                     }
