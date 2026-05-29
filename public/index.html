@@ -1307,6 +1307,11 @@
             border-radius: 3px;
         }
 
+        /* Mobile persona bar (hidden on desktop) */
+        .mobile-persona-bar {
+            display: none;
+        }
+
         /* ==================== MOBILE RESPONSIVENESS ==================== */
         .mobile-menu-btn {
             display: none;
@@ -1381,6 +1386,38 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+            .mobile-persona-bar {
+                display: flex;
+                gap: 8px;
+                overflow-x: auto;
+                padding: 10px 16px;
+                background: var(--bg-sidebar);
+                border-bottom: 1px solid var(--border-primary);
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .mobile-persona-bar::-webkit-scrollbar {
+                display: none;
+            }
+            .mobile-persona-chip {
+                flex-shrink: 0;
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                border: 2px solid var(--border-primary);
+                background: var(--bg-input);
+                color: var(--text-primary);
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .mobile-persona-chip.active {
+                background: var(--bg-user);
+                color: white;
+                border-color: transparent;
+                box-shadow: 0 2px 8px var(--shadow-btn-soft);
             }
             .header-controls {
                 gap: 6px;
@@ -1557,6 +1594,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mobile-only horizontal persona selector -->
+        <div class="mobile-persona-bar" id="mobilePersonaBar"></div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
@@ -2149,6 +2189,20 @@
             });
 
             sidebarPersonas.innerHTML = html;
+
+            // Populate mobile horizontal persona bar
+            const mobileBar = document.getElementById('mobilePersonaBar');
+            if (mobileBar) {
+                let mobileHtml = '';
+                all.forEach(p => {
+                    const isSelected = p.id === activePersonaId;
+                    mobileHtml += `<button class="mobile-persona-chip${isSelected ? ' active' : ''}" data-id="${p.id}">${p.name}</button>`;
+                });
+                mobileBar.innerHTML = mobileHtml;
+                mobileBar.querySelectorAll('.mobile-persona-chip').forEach(chip => {
+                    chip.addEventListener('click', () => setPersona(chip.dataset.id));
+                });
+            }
 
             // Select persona clicks
             sidebarPersonas.querySelectorAll('.agent-card').forEach(btn => {
