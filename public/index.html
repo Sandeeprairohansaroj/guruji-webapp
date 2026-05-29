@@ -2392,12 +2392,13 @@
             const femaleKeywords = ['female', 'zira', 'catherine', 'hazel', 'susan', 'amy', 'emma', 'joanna',
                 'kendra', 'kimberly', 'salli', 'ivy', 'raveena', 'aditi', 'vicki', 'tessa',
                 'nicole', 'olivia', 'mia', 'zhiyu', 'dora', 'sofia', 'laura', 'ines', 'mathilde',
-                'lea', 'lena', 'lisa', 'marlene', 'viktoriya', 'hilary', 'ayanda'];
+                'lea', 'lena', 'lisa', 'marlene', 'viktoriya', 'hilary', 'ayanda',
+                'lekha', 'swara', 'veena', 'kalpana', 'neerja', 'kajal', 'heera'];
             const maleKeywords = ['male', 'david', 'mark', 'george', 'matthew', 'justin', 'joey', 'kevin',
                 'enrique', 'hans', 'giorgio', 'takumi', 'ruben', 'arthur', 'daniel', 'rupert',
                 'kunal', 'gabriel', 'liam', 'jorge', 'carlos', 'ricardo', 'diego', 'miguel',
                 'javier', 'fernando', 'andres', 'guillaume', 'thomas', 'geraint', 'jason',
-                'tony', 'hiujin'];
+                'tony', 'hiujin', 'hemant', 'mohan', 'vijay', 'rishi'];
             if (femaleKeywords.some(k => nameLower.includes(k))) return 'Female';
             if (maleKeywords.some(k => nameLower.includes(k))) return 'Male';
             return 'Neutral';
@@ -2408,8 +2409,9 @@
                 voicePanel.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Loading voices...</div>';
                 return;
             }
+            const hindi = allVoices.filter(v => v.lang.startsWith('hi'));
             const english = allVoices.filter(v => v.lang.startsWith('en'));
-            const others = allVoices.filter(v => !v.lang.startsWith('en'));
+            const others = allVoices.filter(v => !v.lang.startsWith('en') && !v.lang.startsWith('hi'));
 
             let html = '';
             const addGroup = (title, voicesList) => {
@@ -2434,6 +2436,7 @@
             };
 
             addGroup('English Voices', english);
+            addGroup('Hindi / Devanagari Voices', hindi);
             addGroup('Other Languages', others);
             voicePanel.innerHTML = html;
 
@@ -2443,11 +2446,14 @@
                     btn.classList.add('selected');
                     selectedVoiceName = btn.dataset.name;
                     localStorage.setItem('guruji-voice', selectedVoiceName);
-                    // Preview
+                    // Preview in the voice's language
                     const voice = allVoices.find(v => v.name === selectedVoiceName);
                     if (voice) {
-                        const u = new SpeechSynthesisUtterance('Hello, I am Thinky.');
+                        const isHindi = voice.lang.startsWith('hi') || voice.name.toLowerCase().includes('hindi');
+                        const previewText = isHindi ? 'Namaste, main Thinky hoon.' : 'Hello, I am Thinky.';
+                        const u = new SpeechSynthesisUtterance(previewText);
                         u.voice = voice;
+                        u.lang = voice.lang || 'en-US';
                         window.speechSynthesis.speak(u);
                     }
                 });
@@ -2589,10 +2595,24 @@
             utterance.pitch = 1;
             utterance.volume = 1;
 
-            // Use selected voice if available, otherwise fallback
-            const selected = allVoices.find(v => v.name === selectedVoiceName);
-            const fallback = allVoices.find(v => v.lang === 'en-US') || allVoices.find(v => v.lang.startsWith('en')) || allVoices[0];
-            utterance.voice = selected || fallback;
+            function hasHindi(text) {
+                return /[\u0900-\u097F]/.test(text);
+            }
+            function pickVoice(text) {
+                // If user explicitly selected a voice, use it
+                const selected = allVoices.find(v => v.name === selectedVoiceName);
+                if (selected) return selected;
+                // Auto-detect Hindi text and pick a Hindi voice
+                if (hasHindi(text)) {
+                    const hiVoice = allVoices.find(v => v.lang.startsWith('hi')) || allVoices.find(v => v.name.toLowerCase().includes('hindi'));
+                    if (hiVoice) return hiVoice;
+                }
+                // Fallback to English
+                return allVoices.find(v => v.lang === 'en-US') || allVoices.find(v => v.lang.startsWith('en')) || allVoices[0];
+            }
+            const selectedVoice = pickVoice(cleanText);
+            utterance.lang = selectedVoice.lang || 'en-US';
+            utterance.voice = selectedVoice;
 
             utterance.onstart = () => {
                 if (btn) {
