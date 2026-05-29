@@ -164,9 +164,11 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Local:   http://localhost:${PORT}`);
     console.log(`Network: http://${localIP}:${PORT}`);
     
-    // Auto-open browser on Windows (host machine only)
-    const startCmd = process.platform === 'win32' ? `start http://localhost:${PORT}` : `open http://localhost:${PORT}`;
-    exec(startCmd, (err) => {
-        if (err) console.log('Could not auto-open browser. Please open manually.');
-    });
+    // Auto-open browser only in local development
+    if (process.env.NODE_ENV !== 'production') {
+        const startCmd = process.platform === 'win32' ? `start http://localhost:${PORT}` : `open http://localhost:${PORT}`;
+        exec(startCmd, (err) => {
+            if (err) console.log('Could not auto-open browser. Please open manually.');
+        });
+    }
 });
