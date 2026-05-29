@@ -2144,14 +2144,15 @@
                     }
                 }
 
+                // In voice chat mode, interrupt Thinky immediately when user starts talking
+                if (voiceChatEnabled && currentUtterance) {
+                    stopSpeaking();
+                }
+
                 // Append final transcript to input, keep interim as placeholder/visual feedback
                 if (finalTranscript) {
                     const current = userInput.value.trim();
                     userInput.value = current ? current + ' ' + finalTranscript : finalTranscript;
-                    // In voice chat mode, interrupt Thinky if user starts talking
-                    if (voiceChatEnabled && currentUtterance) {
-                        stopSpeaking();
-                    }
                 }
                 if (interimTranscript) {
                     userInput.placeholder = interimTranscript;
@@ -2384,6 +2385,7 @@
         let voiceChatAutoListenTimeout = null;
         let currentUtterance = null;
         let currentSpeakingBtn = null;
+        let ttsInterrupted = false;
         let selectedVoiceName = localStorage.getItem('guruji-voice') || '';
         let allVoices = [];
 
@@ -2519,6 +2521,7 @@
                 voiceChatEnabled = false;
                 return;
             }
+            ttsInterrupted = false;
             // Force TTS on for voice chat so Thinky replies by voice
             if (!ttsEnabled) {
                 ttsEnabled = true;
@@ -2572,11 +2575,17 @@
         }
 
         function stopSpeaking() {
+            ttsInterrupted = true;
             window.speechSynthesis.cancel();
             currentUtterance = null;
             if (currentSpeakingBtn) {
                 currentSpeakingBtn.classList.remove('speaking');
                 currentSpeakingBtn = null;
+            }
+            // Prevent TTS callbacks from scheduling a conflicting auto-listen
+            if (voiceChatAutoListenTimeout) {
+                clearTimeout(voiceChatAutoListenTimeout);
+                voiceChatAutoListenTimeout = null;
             }
         }
 
@@ -2629,7 +2638,7 @@
                 if (btn) btn.classList.remove('speaking');
                 currentUtterance = null;
                 currentSpeakingBtn = null;
-                if (voiceChatEnabled) {
+                if (voiceChatEnabled && !ttsInterrupted) {
                     typingIndicator.classList.remove('active');
                     typingIndicator.textContent = 'Thinky is thinking...';
                     // Auto-listen again after a natural pause
@@ -2637,19 +2646,21 @@
                         if (voiceChatEnabled && !isListening) startListening();
                     }, 700);
                 }
+                ttsInterrupted = false;
             };
 
             utterance.onerror = () => {
                 if (btn) btn.classList.remove('speaking');
                 currentUtterance = null;
                 currentSpeakingBtn = null;
-                if (voiceChatEnabled) {
+                if (voiceChatEnabled && !ttsInterrupted) {
                     typingIndicator.classList.remove('active');
                     typingIndicator.textContent = 'Thinky is thinking...';
                     voiceChatAutoListenTimeout = setTimeout(() => {
                         if (voiceChatEnabled && !isListening) startListening();
                     }, 700);
                 }
+                ttsInterrupted = false;
             };
 
             currentUtterance = utterance;
