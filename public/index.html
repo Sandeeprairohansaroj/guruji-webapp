@@ -2717,6 +2717,13 @@
             pendingFile = null;
             renderAttachment();
 
+            // Keep system prompt + last 10 exchanges to speed up long conversations
+            const MAX_HISTORY_PAIRS = 10;
+            let apiMessages = messages;
+            if (messages.length > 1 + MAX_HISTORY_PAIRS * 2) {
+                apiMessages = [messages[0], ...messages.slice(-MAX_HISTORY_PAIRS * 2)];
+            }
+
             sendBtn.disabled = true;
             typingIndicator.classList.add('active');
 
@@ -2732,18 +2739,26 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 const contentDiv = document.getElementById('streamingContent');
 
-                // Set up a text node + cursor so we only append new chunks (no innerHTML thrashing)
+                // Set up a text node so we only append new chunks (no innerHTML thrashing)
                 const streamText = document.createTextNode('');
-                const streamCursor = document.createElement('span');
-                streamCursor.className = 'typing-cursor';
                 contentDiv.appendChild(streamText);
-                contentDiv.appendChild(streamCursor);
+
+                // Batch scrolls to avoid layout thrashing on every chunk
+                let scrollPending = false;
+                function scheduleScroll() {
+                    if (scrollPending) return;
+                    scrollPending = true;
+                    requestAnimationFrame(() => {
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        scrollPending = false;
+                    });
+                }
 
                 // Call streaming endpoint
                 const res = await fetch('/api/chat/stream', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: messages })
+                    body: JSON.stringify({ messages: apiMessages })
                 });
 
                 const reader = res.body.getReader();
@@ -2770,7 +2785,7 @@
                             if (data.content) {
                                 fullResponse += data.content;
                                 streamText.appendData(data.content);
-                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                                scheduleScroll();
                             }
                         } catch (e) {
                             // Ignore parse errors for incomplete chunks
@@ -2778,8 +2793,7 @@
                     }
                 }
 
-                // Clean up cursor and id before markdown render
-                streamCursor.remove();
+                // Clean up id before markdown render
                 contentDiv.removeAttribute('id');
 
                 // Render full markdown after streaming completes
