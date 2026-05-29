@@ -350,16 +350,24 @@
 
         /* Header button overrides for light sidebar background */
         .chat-header .theme-toggle,
-        .chat-header .tts-toggle {
+        .chat-header .tts-toggle,
+        .chat-header .voice-chat-toggle {
             background: rgba(0,0,0,0.06);
             border: 2px solid rgba(0,0,0,0.2);
             color: var(--text-primary);
             box-shadow: none;
         }
         .chat-header .theme-toggle:hover,
-        .chat-header .tts-toggle:hover {
+        .chat-header .tts-toggle:hover,
+        .chat-header .voice-chat-toggle:hover {
             background: rgba(0,0,0,0.12);
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .chat-header .voice-chat-toggle.active {
+            background: rgba(46, 204, 113, 0.4);
+            border-color: rgba(46, 204, 113, 0.8);
+            color: #27ae60;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
         }
         .chat-header .voice-model-toggle {
             background: rgba(0,0,0,0.05);
@@ -528,7 +536,7 @@
             gap: 10px;
             align-items: center;
         }
-        .theme-toggle, .tts-toggle {
+        .theme-toggle, .tts-toggle, .voice-chat-toggle {
             background: rgba(255,255,255,0.2);
             border: 2px solid rgba(255,255,255,0.5);
             color: white;
@@ -544,7 +552,7 @@
             flex-shrink: 0;
             box-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
-        .theme-toggle:hover, .tts-toggle:hover {
+        .theme-toggle:hover, .tts-toggle:hover, .voice-chat-toggle:hover {
             background: rgba(255,255,255,0.35);
             transform: scale(1.1);
             box-shadow: 0 0 15px rgba(255,255,255,0.5);
@@ -583,6 +591,12 @@
             border-color: rgba(46, 204, 113, 0.8);
             box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
             animation: speakPulse 1.5s infinite ease-in-out;
+        }
+        .voice-chat-toggle.active {
+            background: rgba(46, 204, 113, 0.5);
+            border-color: rgba(46, 204, 113, 0.9);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+            animation: speakPulse 1.2s infinite ease-in-out;
         }
         @keyframes speakPulse {
             0%, 100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
@@ -1437,7 +1451,7 @@
             .header-controls {
                 gap: 6px;
             }
-            .theme-toggle, .tts-toggle {
+            .theme-toggle, .tts-toggle, .voice-chat-toggle {
                 width: 36px;
                 height: 36px;
                 font-size: 16px;
@@ -1585,6 +1599,7 @@
                 </div>
             </div>
             <div class="header-controls">
+                <button class="voice-chat-toggle" id="voiceChatToggle" title="Start voice conversation">&#128222;</button>
                 <button class="tts-toggle" id="ttsToggle" title="Toggle auto-speak">&#128264;</button>
                 <button class="voice-model-toggle" id="voiceToggle" title="Choose voice">
                     <span>Change Voice Model</span>
@@ -2090,6 +2105,10 @@
                 micBtn.classList.add('listening');
                 micBtn.title = 'Listening... click to stop';
                 userInput.placeholder = 'Listening...';
+                if (voiceChatEnabled) {
+                    typingIndicator.classList.add('active');
+                    typingIndicator.textContent = 'Listening...';
+                }
             };
 
             recognition.onend = () => {
@@ -2097,6 +2116,19 @@
                 micBtn.classList.remove('listening');
                 micBtn.title = 'Click & speak';
                 userInput.placeholder = 'Ask Thinky anything...';
+                if (voiceChatEnabled) {
+                    typingIndicator.classList.remove('active');
+                    typingIndicator.textContent = 'Thinky is thinking...';
+                    // Auto-send what was captured
+                    if (userInput.value.trim()) {
+                        sendMessage();
+                    } else {
+                        // Nothing captured — restart listening after a short pause
+                        voiceChatAutoListenTimeout = setTimeout(() => {
+                            if (voiceChatEnabled && !isListening) startListening();
+                        }, 400);
+                    }
+                }
             };
 
             recognition.onresult = (event) => {
@@ -2116,6 +2148,10 @@
                 if (finalTranscript) {
                     const current = userInput.value.trim();
                     userInput.value = current ? current + ' ' + finalTranscript : finalTranscript;
+                    // In voice chat mode, interrupt Thinky if user starts talking
+                    if (voiceChatEnabled && currentUtterance) {
+                        stopSpeaking();
+                    }
                 }
                 if (interimTranscript) {
                     userInput.placeholder = interimTranscript;
@@ -2126,6 +2162,10 @@
                 console.warn('Speech recognition error:', event.error);
                 if (event.error === 'not-allowed') {
                     alert('Microphone permission denied. Please allow microphone access in your browser settings.');
+                    if (voiceChatEnabled) {
+                        voiceChatEnabled = false;
+                        updateVoiceChatToggle();
+                    }
                 } else if (event.error === 'no-speech') {
                     // User didn't speak, just stop silently
                 } else {
@@ -2135,6 +2175,13 @@
                 micBtn.classList.remove('listening');
                 micBtn.title = 'Click & speak';
                 userInput.placeholder = 'Ask Thinky anything...';
+                if (voiceChatEnabled) {
+                    typingIndicator.classList.remove('active');
+                    // Retry listening after a brief pause
+                    voiceChatAutoListenTimeout = setTimeout(() => {
+                        if (voiceChatEnabled && !isListening) startListening();
+                    }, 600);
+                }
             };
 
             micBtn.addEventListener('click', () => {
@@ -2331,7 +2378,10 @@
         const ttsToggle = document.getElementById('ttsToggle');
         const voiceToggle = document.getElementById('voiceToggle');
         const voicePanel = document.getElementById('voicePanel');
+        const voiceChatToggle = document.getElementById('voiceChatToggle');
         let ttsEnabled = localStorage.getItem('guruji-tts') === 'true';
+        let voiceChatEnabled = localStorage.getItem('guruji-voice-chat') === 'true';
+        let voiceChatAutoListenTimeout = null;
         let currentUtterance = null;
         let currentSpeakingBtn = null;
         let selectedVoiceName = localStorage.getItem('guruji-voice') || '';
@@ -2447,6 +2497,60 @@
             updateTtsToggle();
         });
 
+        // ==================== VOICE CHAT MODE ====================
+        function startListening() {
+            if (!recognition || isListening) return;
+            try {
+                recognition.start();
+            } catch (e) {
+                console.warn('Could not start listening:', e);
+            }
+        }
+
+        function startVoiceChat() {
+            if (!recognition) {
+                alert('Voice chat is not supported in this browser.');
+                voiceChatEnabled = false;
+                return;
+            }
+            // Force TTS on for voice chat so Thinky replies by voice
+            if (!ttsEnabled) {
+                ttsEnabled = true;
+                updateTtsToggle();
+            }
+            typingIndicator.textContent = 'Listening...';
+            startListening();
+        }
+
+        function stopVoiceChat() {
+            stopSpeaking();
+            if (isListening) {
+                try { recognition.stop(); } catch (e) {}
+            }
+            if (voiceChatAutoListenTimeout) {
+                clearTimeout(voiceChatAutoListenTimeout);
+                voiceChatAutoListenTimeout = null;
+            }
+            typingIndicator.textContent = 'Thinky is thinking...';
+        }
+
+        function updateVoiceChatToggle() {
+            voiceChatToggle.classList.toggle('active', voiceChatEnabled);
+            voiceChatToggle.title = voiceChatEnabled ? 'End voice conversation' : 'Start voice conversation';
+            localStorage.setItem('guruji-voice-chat', voiceChatEnabled);
+        }
+        updateVoiceChatToggle();
+
+        voiceChatToggle.addEventListener('click', () => {
+            if (voiceChatEnabled) {
+                stopVoiceChat();
+            } else {
+                startVoiceChat();
+            }
+            voiceChatEnabled = !voiceChatEnabled;
+            updateVoiceChatToggle();
+        });
+
         function stripMarkdown(text) {
             return text
                 .replace(/```[\s\S]*?```/g, ' code block ')
@@ -2495,18 +2599,37 @@
                     btn.classList.add('speaking');
                     currentSpeakingBtn = btn;
                 }
+                if (voiceChatEnabled) {
+                    typingIndicator.classList.add('active');
+                    typingIndicator.textContent = 'Thinky is speaking...';
+                }
             };
 
             utterance.onend = () => {
                 if (btn) btn.classList.remove('speaking');
                 currentUtterance = null;
                 currentSpeakingBtn = null;
+                if (voiceChatEnabled) {
+                    typingIndicator.classList.remove('active');
+                    typingIndicator.textContent = 'Thinky is thinking...';
+                    // Auto-listen again after a natural pause
+                    voiceChatAutoListenTimeout = setTimeout(() => {
+                        if (voiceChatEnabled && !isListening) startListening();
+                    }, 700);
+                }
             };
 
             utterance.onerror = () => {
                 if (btn) btn.classList.remove('speaking');
                 currentUtterance = null;
                 currentSpeakingBtn = null;
+                if (voiceChatEnabled) {
+                    typingIndicator.classList.remove('active');
+                    typingIndicator.textContent = 'Thinky is thinking...';
+                    voiceChatAutoListenTimeout = setTimeout(() => {
+                        if (voiceChatEnabled && !isListening) startListening();
+                    }, 700);
+                }
             };
 
             currentUtterance = utterance;
@@ -2800,8 +2923,8 @@
                 formatBotMessage(contentDiv, fullResponse);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                // Auto-speak if TTS is enabled
-                if (ttsEnabled) {
+                // Auto-speak if TTS is enabled or voice chat is active
+                if (ttsEnabled || voiceChatEnabled) {
                     const speakerBtn = contentDiv.parentElement.querySelector('.message-speaker');
                     speak(fullResponse, speakerBtn);
                 }
