@@ -508,6 +508,21 @@
         .face-custom .ai-eye { width: 4px; height: 4px; border-radius: 50%; }
         .face-custom .ai-face-mouth { width: 6px; height: 2px; border-radius: 0 0 6px 6px; bottom: 8px; }
 
+        /* Mini animated face inside bot message avatars */
+        .message.bot .avatar {
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+        }
+        .message.bot .avatar .ai-face-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.78);
+            width: 44px;
+            height: 44px;
+        }
+
         .header-controls {
             display: flex;
             gap: 10px;
@@ -1600,7 +1615,7 @@
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
-                <div class="avatar">G</div>
+                <div class="avatar"><div class="ai-face-container face-guruji"><div class="ai-face-ring"></div><div class="ai-face-orb"><div class="ai-face-eyes"><div class="ai-eye"></div><div class="ai-eye"></div></div><div class="ai-face-mouth"></div></div></div></div>
                 <div class="message-content" data-raw-text="Namaste! I am Thinky, your wise AI assistant. How may I assist you today?">Namaste! I am Thinky, your wise AI assistant. How may I assist you today?</div>
             </div>
         </div>
@@ -1972,6 +1987,23 @@
             };
             const cls = map[personaId] || 'face-custom';
             container.className = 'ai-face-container ' + cls;
+            // Update face class in all existing bot message avatars
+            document.querySelectorAll('.message.bot .avatar .ai-face-container').forEach(face => {
+                face.className = 'ai-face-container ' + cls;
+            });
+        }
+
+        function getBotAvatarHtml(personaId) {
+            const map = {
+                'guruji': 'face-guruji',
+                'coder': 'face-coder',
+                'teacher': 'face-teacher',
+                'creative': 'face-creative',
+                'it-engineer': 'face-it-engineer',
+                'scientist': 'face-scientist'
+            };
+            const cls = map[personaId] || 'face-custom';
+            return `<div class="ai-face-container ${cls}"><div class="ai-face-ring"></div><div class="ai-face-orb"><div class="ai-face-eyes"><div class="ai-eye"></div><div class="ai-eye"></div></div><div class="ai-face-mouth"></div></div></div>`;
         }
 
         // ==================== MOBILE SIDEBAR TOGGLE ====================
@@ -2575,8 +2607,9 @@
                 contentHtml = '';
             }
 
+            const avatarHtml = role === 'user' ? 'U' : getBotAvatarHtml(activePersonaId);
             div.innerHTML = `
-                <div class="avatar">${role === 'user' ? 'U' : 'G'}</div>
+                <div class="avatar">${avatarHtml}</div>
                 <div class="message-content">${contentHtml}</div>
             `;
             chatMessages.appendChild(div);
@@ -2692,7 +2725,7 @@
                 const botDiv = document.createElement('div');
                 botDiv.className = 'message bot';
                 botDiv.innerHTML = `
-                    <div class="avatar">G</div>
+                    <div class="avatar">${getBotAvatarHtml(activePersonaId)}</div>
                     <div class="message-content" id="streamingContent"></div>
                 `;
                 chatMessages.appendChild(botDiv);
