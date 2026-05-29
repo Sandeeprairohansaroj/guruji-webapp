@@ -2652,6 +2652,13 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 const contentDiv = document.getElementById('streamingContent');
 
+                // Set up a text node + cursor so we only append new chunks (no innerHTML thrashing)
+                const streamText = document.createTextNode('');
+                const streamCursor = document.createElement('span');
+                streamCursor.className = 'typing-cursor';
+                contentDiv.appendChild(streamText);
+                contentDiv.appendChild(streamCursor);
+
                 // Call streaming endpoint
                 const res = await fetch('/api/chat/stream', {
                     method: 'POST',
@@ -2682,8 +2689,7 @@
                             if (data.done) break;
                             if (data.content) {
                                 fullResponse += data.content;
-                                // Show raw text with blinking cursor while streaming
-                                contentDiv.innerHTML = escapeHtml(fullResponse) + '<span class="typing-cursor"></span>';
+                                streamText.appendData(data.content);
                                 chatMessages.scrollTop = chatMessages.scrollHeight;
                             }
                         } catch (e) {
@@ -2692,7 +2698,8 @@
                     }
                 }
 
-                // Remove the id so next message doesn't conflict
+                // Clean up cursor and id before markdown render
+                streamCursor.remove();
                 contentDiv.removeAttribute('id');
 
                 // Render full markdown after streaming completes

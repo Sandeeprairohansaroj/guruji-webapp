@@ -6,6 +6,7 @@ const { exec } = require('child_process');
 const multer = require('multer');
 const os = require('os');
 const fs = require('fs');
+const https = require('https');
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
@@ -14,9 +15,12 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize OpenAI client with Azure AI Foundry endpoint
+// keepAlive agent reuses TLS connections between requests
+const azureAgent = new https.Agent({ keepAlive: true });
 const client = new OpenAI({
     baseURL: process.env.AZURE_ENDPOINT,
-    apiKey: process.env.AZURE_API_KEY
+    apiKey: process.env.AZURE_API_KEY,
+    httpAgent: azureAgent
 });
 
 const DEPLOYMENT_NAME = process.env.AZURE_DEPLOYMENT_NAME || 'Kimi-K2.6';
